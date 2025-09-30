@@ -10,3 +10,5 @@ DON PE/Assets/Assets/ALP_Assets/Realistic Terrain Textures Lite/Textures/Ground0
 DON PE/Assets/Assets/ALP_Assets/Realistic Terrain Textures Lite/Textures/Ground001_N.png.meta
 DON PE/Assets/Assets/ALP_Assets/Realistic Terrain Textures Lite/Textures/Ground001_S.png
 DON PE/Assets/Assets/ALP_Assets/Realistic Terrain Textures Lite/Textures/Ground001_S.png.meta
+DON PE/Assets/Assets/script/using UnityEngine;  public class Tronco  MonoBehaviour {     private void OnTriggerEnter(Collider other)     {         InventarioJugador inv = other.GetComponentInventarioJug.cs
+DON PE/Assets/Assets/script/using UnityEngine;  public class Tronco  MonoBehaviour {     private void OnTriggerEnter(Collider other)     {         InventarioJugador inv = other.GetComponentInventarioJug.cs.meta

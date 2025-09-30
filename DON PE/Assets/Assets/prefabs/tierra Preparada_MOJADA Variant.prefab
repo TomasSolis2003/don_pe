@@ -1,0 +1,108 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1001 &2500953090550670387
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.06
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.25
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalScale.z
+      value: 0.09
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 49.16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.95
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 57.99
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7433967665613969713, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809543676741895051, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_Name
+      value: tierra Preparada_MOJADA Variant
+      objectReference: {fileID: 0}
+    - target: {fileID: 7809543676741895051, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_TagString
+      value: tierra preparada
+      objectReference: {fileID: 0}
+    - target: {fileID: 8602419446955827806, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 88ecc4de0aa3c8b4a91f1ec50ae32661, type: 2}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7809543676741895051, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5793199498146680462}
+  m_SourcePrefab: {fileID: 100100000, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+--- !u!1 &5680227758893524920 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7809543676741895051, guid: 29fa4bf8c05998b4b8447bbaa68e0e68, type: 3}
+  m_PrefabInstance: {fileID: 2500953090550670387}
+  m_PrefabAsset: {fileID: 0}
+--- !u!65 &5793199498146680462
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5680227758893524920}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 16.37954, y: 1.6317742, z: 11.669465}
+  m_Center: {x: 0, y: 1.062399, z: 0}

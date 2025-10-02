@@ -3,15 +3,30 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - trigo
+  - "guada\xF1a"
+  - mercado
+  - vehi_arador
+  - VehicleCamera
+  - arador
+  - CashingArea
+  - ruedas
+  - REGADOR
+  - vehi_cosechador
+  - Ground
+  - fardo
+  - tierra sin preparar
+  - tierra preparada
+  - Enemy
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - lobo
   - Water
   - UI
-  - 
+  - capa objetivo
   - 
   - 
   - 

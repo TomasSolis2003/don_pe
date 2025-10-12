@@ -1,4 +1,4 @@
-using UnityEngine;
+/*using UnityEngine;
 
 public class SunMovement : MonoBehaviour
 {
@@ -8,5 +8,50 @@ public class SunMovement : MonoBehaviour
     {
         float rotationSpeed = 360f / dayDuration; // Grados por segundo
         transform.Rotate(Vector3.right * rotationSpeed * Time.deltaTime);
+    }
+}
+*/
+using UnityEngine;
+
+public class SunMovement : MonoBehaviour
+{
+    [Header("Duración del ciclo")]
+    [Tooltip("Duración total del día en minutos reales")]
+    public float dayLengthInMinutes = 10f;
+
+    [Header("Horario inicial")]
+    [Range(0, 24)]
+    public float startHour = 8f; // 8 AM
+
+    [Header("Definición de día y noche")]
+    [Range(0, 24)] public float sunriseHour = 6f;
+    [Range(0, 24)] public float sunsetHour = 18f;
+
+    [Header("Estado (debug)")]
+    public float currentHour;   // hora actual (0-24)
+    public bool esDeDia;
+
+    private float timeSpeed; // horas que pasan por segundo
+
+    void Start()
+    {
+        // cuántas horas avanza cada segundo real
+        timeSpeed = 24f / (dayLengthInMinutes * 60f);
+        currentHour = startHour;
+    }
+
+    void Update()
+    {
+        // avanzar el reloj
+        currentHour += timeSpeed * Time.deltaTime;
+        if (currentHour >= 24f) currentHour -= 24f;
+
+        // rotar el sol: 0h = medianoche, 6h = amanecer, 12h = mediodía
+        // usamos -90 para que a las 6am esté justo en el horizonte
+        float sunAngle = (currentHour / 24f) * 360f - 90f;
+        transform.rotation = Quaternion.Euler(sunAngle, 170f, 0f);
+
+        // determinar día/noche
+        esDeDia = currentHour >= sunriseHour && currentHour < sunsetHour;
     }
 }

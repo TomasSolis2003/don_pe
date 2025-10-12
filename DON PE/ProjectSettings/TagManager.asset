@@ -19,11 +19,14 @@ TagManager:
   - tierra sin preparar
   - tierra preparada
   - Enemy
+  - Hoguera
+  - LoboSalvaje
+  - Trigo
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - lobo
+  - LoboSalvaje
   - Water
   - UI
   - capa objetivo

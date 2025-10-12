@@ -251,7 +251,7 @@ public interface IDañoRecibible
     void RecibirDaño(int cantidad);
 }
 */
-using UnityEngine;
+/*using UnityEngine;
 using UnityEngine.AI;
 
 public class WolfAI : MonoBehaviour
@@ -468,6 +468,241 @@ public class WolfAI : MonoBehaviour
 }
 
 // Interfaz opcional para recibir daño
+public interface IDañoRecibible
+{
+    void RecibirDaño(int cantidad);
+}
+*/
+using UnityEngine;
+using UnityEngine.AI;
+
+public class WolfAI : MonoBehaviour, IDañoRecibible
+{
+    public enum Estado { Merodear, Perseguir, Volver }
+
+    [Header("Refs")]
+    public NavMeshAgent agent;
+    [Tooltip("Capas que se consideran objetivos (ej. Player, Enemigos)")]
+    public LayerMask capasObjetivo = ~0;
+    [Tooltip("Capas que bloquean línea de visión (paredes/rocas)")]
+    public LayerMask capasObstaculos;
+
+    [Header("Detección")]
+    public float radioDeteccion = 12f;
+    public bool usarLineaVision = true;
+    public float refrescoDeteccion = 0.2f;
+
+    [Header("Movimiento")]
+    public float radioMerodeo = 15f;
+    public float umbralLlegada = 0.6f;
+    public float intervaloNuevoDestino = 3f;
+    public float velocidadMerodeo = 2.2f;
+    public float velocidadPersecucion = 4.0f;
+
+    [Header("Persecución")]
+    public float distanciaMaxPersecucion = 20f;
+
+    [Header("Combate")]
+    public float rangoAtaque = 1.8f;
+    public float cdAtaque = 1.0f;
+    public int dano = 10;
+
+    [Header("Vida")]
+    public int vida = 40;
+    public bool esDomado = false; // <- diferencia salvaje/domado
+    public GameObject carnePrefab; // item carne que suelta al morir (solo salvaje)
+
+    [Header("Debug")]
+    public bool dibujarGizmos = true;
+
+    private Estado estado = Estado.Merodear;
+    private Vector3 origen;
+    private Transform objetivo;
+    private float tSiguienteChequeo = 0f;
+    private float tProximoDestino = 0f;
+    private float tPuedeAtacar = 0f;
+
+    void Reset()
+    {
+        agent = GetComponent<NavMeshAgent>();
+    }
+
+    void Awake()
+    {
+        if (!agent) agent = GetComponent<NavMeshAgent>();
+        origen = transform.position;
+    }
+
+    void OnEnable()
+    {
+        SetEstado(Estado.Merodear);
+        BuscarNuevoDestinoMerodeo(true);
+    }
+
+    void Update()
+    {
+        if (Time.time >= tSiguienteChequeo)
+        {
+            tSiguienteChequeo = Time.time + refrescoDeteccion;
+            ActualizarDeteccion();
+        }
+
+        switch (estado)
+        {
+            case Estado.Merodear:
+                agent.speed = velocidadMerodeo;
+                if ((!agent.pathPending && agent.remainingDistance <= umbralLlegada)
+                    || Time.time >= tProximoDestino)
+                {
+                    BuscarNuevoDestinoMerodeo(false);
+                }
+                break;
+
+            case Estado.Perseguir:
+                agent.speed = velocidadPersecucion;
+                if (objetivo)
+                {
+                    MoverA(objetivo.position);
+                    float dist = Vector3.Distance(transform.position, objetivo.position);
+
+                    if (dist > distanciaMaxPersecucion)
+                    {
+                        SetEstado(Estado.Volver);
+                        objetivo = null;
+                        break;
+                    }
+
+                    if (dist <= rangoAtaque)
+                    {
+                        IntentarAtacar();
+                        Vector3 offset = (transform.position - objetivo.position).normalized * 0.5f;
+                        MoverA(objetivo.position + offset);
+                    }
+                }
+                else
+                {
+                    SetEstado(Estado.Volver);
+                }
+                break;
+
+            case Estado.Volver:
+                agent.speed = velocidadMerodeo;
+                MoverA(origen);
+
+                if (!agent.pathPending && agent.remainingDistance <= umbralLlegada)
+                {
+                    SetEstado(Estado.Merodear);
+                    BuscarNuevoDestinoMerodeo(true);
+                }
+                break;
+        }
+    }
+
+    // ------------------- DETECCIÓN -------------------
+    void ActualizarDeteccion()
+    {
+        Collider[] hits = Physics.OverlapSphere(transform.position, radioDeteccion, capasObjetivo, QueryTriggerInteraction.Ignore);
+        Transform mejor = null; float mejorDist = float.MaxValue;
+
+        foreach (var h in hits)
+        {
+            Transform t = h.attachedRigidbody ? h.attachedRigidbody.transform : h.transform;
+            float d = Vector3.SqrMagnitude(t.position - transform.position);
+            if (d < mejorDist)
+            {
+                if (!usarLineaVision || TieneLineaVision(t))
+                {
+                    mejor = t; mejorDist = d;
+                }
+            }
+        }
+        objetivo = mejor;
+
+        if (objetivo)
+            SetEstado(Estado.Perseguir);
+        else if (estado == Estado.Perseguir)
+            SetEstado(Estado.Volver);
+    }
+
+    bool TieneLineaVision(Transform t)
+    {
+        Vector3 origenRay = transform.position + Vector3.up * 0.6f;
+        Vector3 destinoRay = t.position + Vector3.up * 0.6f;
+
+        if (Physics.Linecast(origenRay, destinoRay, out RaycastHit hit, capasObstaculos, QueryTriggerInteraction.Ignore))
+        {
+            return false;
+        }
+        return true;
+    }
+
+    void BuscarNuevoDestinoMerodeo(bool inmediato)
+    {
+        tProximoDestino = Time.time + (inmediato ? 0.1f : intervaloNuevoDestino);
+        Vector3 random = Random.insideUnitSphere * radioMerodeo;
+        random.y = 0f;
+        Vector3 candidato = origen + random;
+
+        if (NavMesh.SamplePosition(candidato, out NavMeshHit hit, 4f, NavMesh.AllAreas))
+        {
+            MoverA(hit.position);
+        }
+    }
+
+    void IntentarAtacar()
+    {
+        if (Time.time < tPuedeAtacar) return;
+        tPuedeAtacar = Time.time + cdAtaque;
+
+        if (objetivo)
+        {
+            var vidaTarget = objetivo.GetComponentInParent<IDañoRecibible>();
+            if (vidaTarget != null) vidaTarget.RecibirDaño(dano);
+        }
+    }
+
+    void MoverA(Vector3 destino)
+    {
+        if (agent && agent.isActiveAndEnabled && agent.isOnNavMesh)
+            agent.SetDestination(destino);
+    }
+
+    void SetEstado(Estado e)
+    {
+        if (estado == e) return;
+        estado = e;
+    }
+
+    // ------------------- VIDA -------------------
+    public void RecibirDaño(int cantidad)
+    {
+        vida -= cantidad;
+        if (vida <= 0) Morir();
+    }
+
+    void Morir()
+    {
+        // Si es salvaje → dropear carne
+        if (!esDomado && carnePrefab != null)
+            Instantiate(carnePrefab, transform.position + Vector3.up * 0.5f, Quaternion.identity);
+
+        Destroy(gameObject);
+    }
+
+    // ------------------- GIZMOS -------------------
+    void OnDrawGizmosSelected()
+    {
+        if (!dibujarGizmos) return;
+
+        Gizmos.color = new Color(0.2f, 0.7f, 1f, 0.25f);
+        Gizmos.DrawWireSphere(Application.isPlaying ? origen : transform.position, radioMerodeo);
+
+        Gizmos.color = new Color(1f, 0.2f, 0.2f, 0.25f);
+        Gizmos.DrawWireSphere(transform.position, radioDeteccion);
+    }
+}
+
+// Interfaz genérica para daño
 public interface IDañoRecibible
 {
     void RecibirDaño(int cantidad);

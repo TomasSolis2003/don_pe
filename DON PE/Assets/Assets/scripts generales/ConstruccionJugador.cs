@@ -12,21 +12,25 @@ public class ConstruccionJugador : MonoBehaviour
     public LayerMask capaSuelo;          // Dónde se puede construir
     public float distanciaColocacion = 5f;
     public KeyCode teclaConstruir = KeyCode.Mouse0;
+    public bool suelo=false;
 
-    private GameObject previewActual;
+    public GameObject previewActual;
     private GameObject prefabSeleccionado;
     private float rotacionActual = 0f;
 
     void Update()
     {
+        
         // Solo si hay preview activo
         if (previewActual != null)
         {
+            Debug.Log("a");//no detecta preview
             MoverPreview();
             RotarPreview();
 
-            if (Input.GetKeyDown(teclaConstruir))
+            if (Input.GetKeyDown(teclaConstruir)&&suelo)
             {
+                
                 ColocarConstruccion();
             }
         }
@@ -38,18 +42,24 @@ public class ConstruccionJugador : MonoBehaviour
         if (previewActual != null) Destroy(previewActual);
 
         prefabSeleccionado = prefab;
-        previewActual = Instantiate(prefabSeleccionado);
+        previewActual = prefab;
         previewActual.GetComponent<Collider>().enabled = false; // Fantasma sin colisión
         SetMaterialPreview(previewActual, new Color(0, 1, 0, 0.5f)); // Verde transparente
     }
 
     void MoverPreview()
     {
+        
         Ray rayo = camaraJugador.ViewportPointToRay(new Vector3(0.5f, 0.5f, 0)); // Centro de la cámara
         if (Physics.Raycast(rayo, out RaycastHit hit, distanciaColocacion, capaSuelo))
         {
             previewActual.transform.position = hit.point;
             previewActual.transform.rotation = Quaternion.Euler(0, rotacionActual, 0);
+            suelo = true;//no detecta el suelo el raycast
+        }
+        else
+        {
+            suelo=false;
         }
     }
 

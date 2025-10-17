@@ -610,7 +610,7 @@ public class InventarioJugador : MonoBehaviour
     void ManejarPreviewConstruccion()
     {
         if (previewActual == null) return;
-        Debug.Log("a");
+      //  Debug.Log("a");
         Vector3 targetPos;
         if (puntoColocacion != null) targetPos = puntoColocacion.position;
         else if (cam != null) targetPos = cam.transform.position + cam.transform.forward * distanciaPreview;

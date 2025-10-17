@@ -21,7 +21,7 @@ public class Construir : MonoBehaviour
     }
 }
 */
-using UnityEngine;
+/*using UnityEngine;
 
 public class Construccion : MonoBehaviour
 {
@@ -42,3 +42,4 @@ public class Construccion : MonoBehaviour
         }
     }
 }
+*/

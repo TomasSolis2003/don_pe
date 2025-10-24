@@ -123,3 +123,5 @@ MonoBehaviour:
   esFinal: 0
   fxCambio: {fileID: 0}
   sfxCambio: {fileID: 0}
+  variacionEscala: 0.5
+  variacionRotacion: 10

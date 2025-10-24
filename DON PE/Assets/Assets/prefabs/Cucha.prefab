@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7219616248562295160}
   - component: {fileID: 7904305036789897972}
   - component: {fileID: 3979035695797309980}
-  m_Layer: 0
+  m_Layer: 11
   m_Name: Cucha
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -99,9 +99,9 @@ BoxCollider:
     serializedVersion: 2
     m_Bits: 0
   m_LayerOverridePriority: 0
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 2, y: 2, z: 2}
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Size: {x: 18.670351, y: 2, z: 27.036053}
+  m_Center: {x: 2.09408, y: 0, z: -0.75081444}

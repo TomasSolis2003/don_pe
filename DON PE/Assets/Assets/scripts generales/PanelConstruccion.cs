@@ -12,6 +12,7 @@ public class PanelConstruccion : MonoBehaviour
         {
             if (b != null)
                 b.Inicializar(this);
+
         }
     }
 
@@ -28,5 +29,6 @@ public class PanelConstruccion : MonoBehaviour
         {
             Debug.Log($"No tenés troncos suficientes para {boton.nombre}");
         }
+
     }
 }

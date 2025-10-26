@@ -87,31 +87,6 @@ public class Machete : MonoBehaviour
         yield return new WaitForSeconds(tiempoEntreGolpes);
         puedeAtacar = true;
     }
-
-    /*    void AtacarCono()
-        {
-            Vector3 origen = Camera.main.transform.position;
-            Vector3 forward = Camera.main.transform.forward;
-
-            Collider[] hits = Physics.OverlapSphere(
-                origen + forward * (rangoGolpe * 0.5f),
-                radioColision,
-                capasAtacables
-            );
-
-            foreach (var h in hits)
-            {
-                Vector3 dir = (h.transform.position - origen).normalized;
-                float ang = Vector3.Angle(forward, dir);
-                if (ang <= anguloGolpe * 0.5f)
-                {
-                    var dmg = h.GetComponentInParent<IDañoRecibible>();
-                    if (dmg != null)
-                        dmg.RecibirDaño(dano);
-                }
-            }
-        }
-        */
     void AtacarCono()
     {
         Vector3 origen = Camera.main.transform.position;

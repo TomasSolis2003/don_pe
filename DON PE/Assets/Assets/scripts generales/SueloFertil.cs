@@ -76,23 +76,7 @@ public class SueloFertil : MonoBehaviour
         Invoke(nameof(CrearArbol), tiempo);
     }
 
-    /*bool EsPosicionValida(Vector3 nuevaPos, float distanciaMinima)
-    {
-        foreach (Vector3 posExistente in posicionesArboles)
-        {
-            if (Vector3.Distance(nuevaPos, posExistente) < distanciaMinima)
-            {
-                return false;
-            }
-        }
 
-        if (Physics.CheckSphere(nuevaPos, 2f, capaEstructuras))
-        {
-            return false;
-        }
-
-        return true;
-    }*/
     bool EsPosicionValida(Vector3 nuevaPos, float distanciaMinima)
     {
         // Evita superposición entre árboles

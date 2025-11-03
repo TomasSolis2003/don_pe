@@ -118,14 +118,14 @@ public class Pies : MonoBehaviour
     }
 }
 */
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 
 public class Pies : MonoBehaviour
 {
     [Header("Configuración")]
     [Tooltip("Tag de los objetos de trigo a detectar.")]
-    public string trigoTag = "Trigo";
+    public string trigoTag = "trigo";
 
     [Tooltip("Prefab de tierra sin preparar.")]
     public GameObject tierraSinPrepararPrefab;
@@ -167,6 +167,59 @@ public class Pies : MonoBehaviour
     }
 
     private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireSphere(transform.position, radioChequeo);
+    }
+}
+
+
+*/
+using System.Collections.Generic;
+using UnityEngine;
+
+public class Pies : MonoBehaviour
+{
+    [Header("Config")]
+    public string trigoTag = "trigo";
+    public GameObject tierraSinPrepararPrefab;
+    public float radioChequeo = 0.5f;
+    public LayerMask capaTierra;
+    public float alturaTierra = 0.95f;
+
+    private HashSet<GameObject> trigosDentro = new HashSet<GameObject>();
+
+    void OnTriggerEnter(Collider other)
+    {
+        if (!other.CompareTag(trigoTag)) return;
+        if (trigosDentro.Contains(other.gameObject)) return;
+        trigosDentro.Add(other.gameObject);
+
+        // marcador atómico
+        var marcador = other.GetComponent<TrigoConsumible>() ?? other.gameObject.AddComponent<TrigoConsumible>();
+        if (marcador.procesado) return; // ya lo hizo otro
+        marcador.procesado = true;      // me lo quedo yo
+
+        Vector3 pos = other.transform.position;
+        pos.y = alturaTierra;
+        if (Physics.Raycast(pos + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 5f))
+            pos = hit.point;
+
+        // evitar tierra duplicada en el mismo punto
+        bool existeTierra = Physics.CheckSphere(pos, radioChequeo, capaTierra, QueryTriggerInteraction.Ignore);
+        if (!existeTierra && tierraSinPrepararPrefab)
+            Instantiate(tierraSinPrepararPrefab, pos, Quaternion.identity);
+
+        Destroy(other.gameObject);
+    }
+
+    void OnTriggerExit(Collider other)
+    {
+        if (trigosDentro.Contains(other.gameObject))
+            trigosDentro.Remove(other.gameObject);
+    }
+
+    void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, radioChequeo);

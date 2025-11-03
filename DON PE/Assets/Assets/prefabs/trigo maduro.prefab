@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 913988104209121848}
   - component: {fileID: 819390174375101125}
   - component: {fileID: 1484955243172582703}
+  - component: {fileID: 5585044560894514075}
   m_Layer: 0
   m_Name: trigo maduro
   m_TagString: trigo
@@ -138,3 +139,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   vida: 40
+--- !u!114 &5585044560894514075
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5412068958063663233}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2f3f6fe8712914fb3fefd614d1a4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  procesado: 0

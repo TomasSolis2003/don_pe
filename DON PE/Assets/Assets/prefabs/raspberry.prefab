@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 4612563809405687079}
   - component: {fileID: 8623484874616855170}
   - component: {fileID: 5784929264133287496}
+  - component: {fileID: 22986013388699451}
+  - component: {fileID: 8376179900174363819}
   m_Layer: 0
   m_Name: raspberry
   m_TagString: Untagged
@@ -83,3 +85,41 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!65 &22986013388699451
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5424813299504156573}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.28404135, y: 0.33629578, z: 0.27186453}
+  m_Center: {x: 0.0011783019, y: 0.1935336, z: 0.015340563}
+--- !u!114 &8376179900174363819
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5424813299504156573}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e62e1395d7ec7e34cb5ac4dbad700fa0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  vidaRestaurada: 1
+  saciedad: 5
+  destruirAlComer: 1
+  distanciaInteraccion: 2
+  teclaComer: 101

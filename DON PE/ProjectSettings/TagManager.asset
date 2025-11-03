@@ -22,6 +22,7 @@ TagManager:
   - Hoguera
   - LoboSalvaje
   - Arbol
+  - Consumido
   layers:
   - Default
   - TransparentFX

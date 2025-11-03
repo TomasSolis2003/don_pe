@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1255445477387825183}
   - component: {fileID: 8274532070039394181}
   - component: {fileID: 4445658674876230179}
+  - component: {fileID: 4368487584599192689}
   m_Layer: 0
   m_Name: trigo inicial
   m_TagString: trigo
@@ -118,4 +119,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18b4b4f8778d7b147a785d531dfdd6bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vida: 60
+  vida: 40
+--- !u!114 &4368487584599192689
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3167156027360274407}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e2f3f6fe8712914fb3fefd614d1a4ca, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  procesado: 0

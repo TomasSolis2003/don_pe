@@ -15,7 +15,7 @@ public class EnemyIA_Granjeros : MonoBehaviour, IDañoRecibible
     public float radioDeteccion = 15f;
     public float intervaloBusqueda = 0.5f;
     public LayerMask capasDetectables;
-    public string tagTrigo = "Trigo";
+    public string tagTrigo = "trigo";
     public string tagHoguera = "Hoguera";
     public string tagLobo = "LoboSalvaje";
 
@@ -189,22 +189,68 @@ public class EnemyIA_Granjeros : MonoBehaviour, IDañoRecibible
         }
     }
 
+    /* IEnumerator ComerTrigoCR(GameObject trigoGO)
+     {
+         estado = Estado.Comiendo;
+         agent.ResetPath();
+
+         var vidaTrigo = trigoGO ? trigoGO.GetComponent<IDañoRecibible>() : null;
+         if (vidaTrigo != null) vidaTrigo.RecibirDaño(danoATrigo);
+
+         yield return new WaitForSeconds(1f);
+
+         comerCR = null;
+         objetivoActual = null;
+         estado = Estado.Buscando;
+
+
+     }
+  */
     IEnumerator ComerTrigoCR(GameObject trigoGO)
     {
         estado = Estado.Comiendo;
         agent.ResetPath();
 
-        var vidaTrigo = trigoGO ? trigoGO.GetComponent<IDañoRecibible>() : null;
-        if (vidaTrigo != null) vidaTrigo.RecibirDaño(danoATrigo);
+        if (!trigoGO) { comerCR = null; estado = Estado.Buscando; yield break; }
 
+        // Asegurar marcador
+        var marcador = trigoGO.GetComponent<TrigoConsumible>();
+        if (!marcador) marcador = trigoGO.AddComponent<TrigoConsumible>();
+
+        // Si ya fue procesado, salir
+        if (marcador.procesado) { comerCR = null; estado = Estado.Buscando; yield break; }
+
+        // Marcar antes de hacer nada (esto evita duplicados aunque entren múltiples llamadas)
+        marcador.procesado = true;
+
+        // Posición base
+        Vector3 pos = trigoGO.transform.position;
+        pos.y = 0.95f; // tu altura
+
+        // (Opcional) Adaptar al terreno
+        if (Physics.Raycast(pos + Vector3.up * 2f, Vector3.down, out RaycastHit hit, 5f))
+            pos = hit.point;
+
+        // Instanciar tierra una sola vez
+        if (prefabTierraSinPreparar != null)
+            Instantiate(prefabTierraSinPreparar, pos, Quaternion.identity);
+        else
+            Debug.LogWarning($"{name}: Falta prefabTierraSinPreparar");
+
+        // Dañar o destruir el trigo
+        var vidaTrigo = trigoGO.GetComponent<IDañoRecibible>();
+        if (vidaTrigo != null) vidaTrigo.RecibirDaño(danoATrigo);
+        else Destroy(trigoGO);
+
+        // pequeña pausa “comer”
         yield return new WaitForSeconds(1f);
 
         comerCR = null;
         objetivoActual = null;
         estado = Estado.Buscando;
-
-
     }
+    
+ 
 
     // --------------------------- ATAQUE JUGADOR ---------------------------
     IEnumerator AtaqueJugadorCR()

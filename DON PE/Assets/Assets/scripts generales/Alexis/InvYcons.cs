@@ -17,6 +17,10 @@ public class InvYcons : MonoBehaviour
     [Header("UI")]
     public GameObject panelConstruccion;
     public bool construccionActiva = false;
+    private void Start()
+    {
+        panelConstruccion.SetActive(false);
+    }
 
     void Update()
     {
@@ -40,9 +44,7 @@ public class InvYcons : MonoBehaviour
             else
             {
                 Cursor.lockState = CursorLockMode.Locked;
-            }
-           
-            
+            }  
 
         }
     }

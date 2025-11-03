@@ -1,20 +1,4 @@
-/*using TMPro;
-using UnityEngine;
-using UnityEngine.UI;
 
-public class BotonEstructuraUI : MonoBehaviour
-{
-    public Button button;
-    public Image icono;
-    public TextMeshProUGUI etiqueta;
-
-    public void Set(Sprite sprite, string texto)
-    {
-        if (icono) icono.sprite = sprite;
-        if (etiqueta) etiqueta.text = texto;
-    }
-}
-*/
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

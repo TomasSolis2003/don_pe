@@ -21,7 +21,7 @@ TagManager:
   - Enemy
   - Hoguera
   - LoboSalvaje
-  - Trigo
+  - Arbol
   layers:
   - Default
   - TransparentFX
@@ -33,9 +33,9 @@ TagManager:
   - Enemy
   - suelo
   - capasJugador
-  - 
-  - 
-  - 
+  - tierra sin preparar
+  - Estructura
+  - Post processing
   - 
   - 
   - 

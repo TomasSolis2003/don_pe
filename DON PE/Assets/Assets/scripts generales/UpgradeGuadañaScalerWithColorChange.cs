@@ -1,297 +1,164 @@
-/*using UnityEngine;
-using TMPro; // Necesario para usar Text Mesh Pro.
-
-public class UpgradeGuadaÒaScalerWithTextAndColor : MonoBehaviour
-{
-    public float scaleAmount = 1.1f; // Cantidad por la que se multiplicar· la escala en X.
-    private int upgradeCount = 0; // Contador de mejoras.
-    private int maxUpgrades = 10; // LÌmite de mejoras.
-    private Renderer upgradeRenderer; // Renderer del objeto UpgradeGuadaÒa.
-    public TextMeshPro textMeshPro; // Referencia al Text Mesh Pro.
-
-    private void Start()
-    {
-        // Asignar el Renderer del objeto UpgradeGuadaÒa.
-        upgradeRenderer = GetComponent<Renderer>();
-
-        if (upgradeRenderer == null)
-        {
-            Debug.LogWarning("El objeto UpgradeGuadaÒa no tiene un Renderer asignado.");
-        }
-
-        // Inicializa el texto a "0/10".
-        UpdateUpgradeText();
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.CompareTag("Player"))
-        {
-            GameObject guadaÒa = GameObject.FindGameObjectWithTag("guadaÒa");
-
-            if (guadaÒa != null && upgradeCount < maxUpgrades)
-            {
-                // Aumenta la escala en X de la guadaÒa.
-                Vector3 newScale = guadaÒa.transform.localScale;
-                newScale.x *= scaleAmount;
-                guadaÒa.transform.localScale = newScale;
-
-                upgradeCount++;
-                Debug.Log("Mejora " + upgradeCount + "/" + maxUpgrades + " aplicada.");
-
-                // Cambia el color gradualmente y lo mantiene verde al m·ximo.
-                Color newColor = upgradeCount < maxUpgrades ? Color.Lerp(Color.white, Color.green, (float)upgradeCount / maxUpgrades) : Color.green;
-                if (upgradeRenderer != null)
-                {
-                    upgradeRenderer.material.color = newColor;
-                }
-
-                // Actualiza el texto.
-                UpdateUpgradeText();
-            }
-            else if (upgradeCount >= maxUpgrades)
-            {
-                Debug.Log("Mejoras completas. El objeto est· al m·ximo.");
-            }
-        }
-    }
-
-    private void UpdateUpgradeText()
-    {
-        if (textMeshPro != null)
-        {
-            textMeshPro.text = upgradeCount + "/" + maxUpgrades;
-        }
-        else
-        {
-            Debug.LogWarning("No se ha asignado un Text Mesh Pro al script.");
-        }
-    }
-}
-*/// salva vidas
-/*using UnityEngine;
+Ôªø
+using UnityEngine;
 using TMPro;
 
-public class UpgradeGuadaÒaScalerWithTextAndColor : MonoBehaviour
+public class UpgradeGuada√±aScalerWithTextAndColor : MonoBehaviour
 {
-    [Header("Mejoras de la guadaÒa")]
-    public float scaleAmount = 1.1f; // Cantidad por la que se multiplicar· la escala en X.
-    private int upgradeCount = 0; // Contador de mejoras.
-    private int maxUpgrades = 10; // LÌmite de mejoras.
-    private Renderer upgradeRenderer; // Renderer del objeto UpgradeGuadaÒa.
-    public TextMeshPro textMeshPro; // Referencia al Text Mesh Pro.
+    [Header("Mejoras de la guada√±a")]
+    [SerializeField] private GameObject guada√±a;
+    [SerializeField] private float scaleAmount = 1.1f;
+    [SerializeField] private int maxUpgrades = 10;
+    [SerializeField] private TextMeshProUGUI upgradeText;
+
+    private int upgradeCount = 0;
+    private Renderer upgradeRenderer;
 
     [Header("Sistema de dinero")]
-    public int dinero = 100; // Dinero inicial del jugador.
-    public TextMeshPro dineroTextMeshPro; // Referencia al TextMeshPro que muestra el dinero en pantalla.
+    [SerializeField] private int dinero = 100;
+    [SerializeField] private int costoMejora = 50;
+    [SerializeField] private TextMeshProUGUI dineroText;
+
+    [Header("Visual")]
+    [SerializeField] private bool usarMaterialCompartido = true;
+    [SerializeField] private bool activarEfectoFlash = true;
 
     private void Start()
     {
-        // Asignar el Renderer del objeto UpgradeGuadaÒa.
+        // Cachear el renderer
         upgradeRenderer = GetComponent<Renderer>();
-
         if (upgradeRenderer == null)
-        {
-            Debug.LogWarning("El objeto UpgradeGuadaÒa no tiene un Renderer asignado.");
-        }
+            Debug.LogWarning("‚ö†Ô∏è No se encontr√≥ Renderer en " + name);
 
-        // Inicializa el texto de mejoras y dinero.
+        // Cachear guada√±a si no est√° asignada
+        if (guada√±a == null)
+            guada√±a = GameObject.FindGameObjectWithTag("guada√±a");
+
         UpdateUpgradeText();
         UpdateDineroUI();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        switch (other.tag)
         {
-            GameObject guadaÒa = GameObject.FindGameObjectWithTag("guadaÒa");
+            case "Player":
+                IntentarMejorarGuadana();
+                break;
 
-            if (guadaÒa != null && upgradeCount < maxUpgrades)
-            {
-                // Aumenta la escala en X de la guadaÒa.
-                Vector3 newScale = guadaÒa.transform.localScale;
-                newScale.x *= scaleAmount;
-                guadaÒa.transform.localScale = newScale;
-
-                upgradeCount++;
-                Debug.Log("Mejora " + upgradeCount + "/" + maxUpgrades + " aplicada.");
-
-                // Cambia el color gradualmente y lo mantiene verde al m·ximo.
-                Color newColor = upgradeCount < maxUpgrades ? Color.Lerp(Color.white, Color.green, (float)upgradeCount / maxUpgrades) : Color.green;
-                if (upgradeRenderer != null)
-                {
-                    upgradeRenderer.material.color = newColor;
-                }
-
-                // Actualiza el texto de mejoras.
-                UpdateUpgradeText();
-            }
-            else if (upgradeCount >= maxUpgrades)
-            {
-                Debug.Log("Mejoras completas. El objeto est· al m·ximo.");
-            }
-        }
-        else if (other.CompareTag("mercado"))
-        {
-            // Interactuar con el mercado.
-            ComprarEnMercado();
+            case "mercado":
+                ComprarEnMercado();
+                break;
         }
     }
 
-    private void ComprarEnMercado()
+    // ============================================================
+    // üîß L√ìGICA DE MEJORA
+    // ============================================================
+    private void IntentarMejorarGuadana()
     {
-        if (dinero >= 50)
+        if (guada√±a == null)
         {
-            dinero -= 50;
-            Debug.Log("Compra realizada. Dinero restante: $" + dinero);
-            UpdateDineroUI();
-        }
-        else
-        {
-            Debug.Log("Dinero insuficiente para comprar.");
-        }
-    }
-
-    private void UpdateUpgradeText()
-    {
-        if (textMeshPro != null)
-        {
-            textMeshPro.text = upgradeCount + "/" + maxUpgrades;
-        }
-        else
-        {
-            Debug.LogWarning("No se ha asignado un Text Mesh Pro al script.");
-        }
-    }
-
-    private void UpdateDineroUI()
-    {
-        if (dineroTextMeshPro != null)
-        {
-            dineroTextMeshPro.text = "Dinero: $" + dinero;
-        }
-        else
-        {
-            Debug.LogWarning("No se ha asignado un Text Mesh Pro para el dinero.");
-        }
-    }
-}
-*/
-using UnityEngine;
-using TMPro; // Necesario para usar Text Mesh Pro.
-
-public class UpgradeGuadaÒaScalerWithTextAndColor : MonoBehaviour
-{
-    [Header("Mejoras de la guadaÒa")]
-    public float scaleAmount = 1.1f; // Cantidad por la que se multiplicar· la escala en X.
-    private int upgradeCount = 0; // Contador de mejoras.
-    private int maxUpgrades = 10; // LÌmite de mejoras.
-    private Renderer upgradeRenderer; // Renderer del objeto UpgradeGuadaÒa.
-    public TextMeshProUGUI upgradeText; // Referencia al TextMeshProUGUI para mejoras.
-
-    [Header("Sistema de dinero")]
-    public int dinero = 100; // Dinero inicial del jugador.
-    public int costoMejora = 50; // Costo de cada mejora.
-    public TextMeshProUGUI dineroText; // Referencia al TextMeshProUGUI que muestra el dinero en pantalla.
-
-    private void Start()
-    {
-        // Asignar el Renderer del objeto UpgradeGuadaÒa.
-        upgradeRenderer = GetComponent<Renderer>();
-
-        if (upgradeRenderer == null)
-        {
-            Debug.LogWarning("El objeto UpgradeGuadaÒa no tiene un Renderer asignado.");
+            Debug.LogWarning("No se asign√≥ la guada√±a.");
+            return;
         }
 
-        // Inicializa el texto de mejoras y dinero.
+        if (upgradeCount >= maxUpgrades)
+        {
+            Debug.Log("üü¢ La guada√±a ya est√° al m√°ximo nivel.");
+            return;
+        }
+
+        if (!PuedePagar(costoMejora))
+            return;
+
+        // Escalar solo en X
+        Vector3 newScale = guada√±a.transform.localScale;
+        newScale.x *= scaleAmount;
+        guada√±a.transform.localScale = newScale;
+
+        upgradeCount++;
+        Debug.Log($"Mejora aplicada: {upgradeCount}/{maxUpgrades}. Dinero restante: ${dinero}");
+
+        // Cambiar color progresivamente
+        float progreso = Mathf.Clamp01((float)upgradeCount / maxUpgrades);
+        Color newColor = Color.Lerp(Color.white, Color.green, progreso);
+        AplicarColor(newColor);
+
+        // Peque√±o efecto visual
+        if (activarEfectoFlash)
+            StartCoroutine(FlashUpgradeColor());
+
         UpdateUpgradeText();
         UpdateDineroUI();
     }
 
-    private void OnTriggerEnter(Collider other)
+    private bool PuedePagar(int costo)
     {
-        if (other.CompareTag("Player"))
+        if (dinero >= costo)
         {
-            GameObject guadaÒa = GameObject.FindGameObjectWithTag("guadaÒa");
-
-            if (guadaÒa != null && upgradeCount < maxUpgrades)
-            {
-                // Verifica si el jugador tiene suficiente dinero para mejorar.
-                if (dinero >= costoMejora)
-                {
-                    // Aumenta la escala en X de la guadaÒa.
-                    Vector3 newScale = guadaÒa.transform.localScale;
-                    newScale.x *= scaleAmount;
-                    guadaÒa.transform.localScale = newScale;
-
-                    upgradeCount++;
-                    dinero -= costoMejora; // Resta el costo de la mejora.
-                    Debug.Log("Mejora " + upgradeCount + "/" + maxUpgrades + " aplicada.");
-                    Debug.Log("Dinero restante: $" + dinero);
-
-                    // Cambia el color gradualmente y lo mantiene verde al m·ximo.
-                    Color newColor = upgradeCount < maxUpgrades ? Color.Lerp(Color.white, Color.green, (float)upgradeCount / maxUpgrades) : Color.green;
-                    if (upgradeRenderer != null)
-                    {
-                        upgradeRenderer.material.color = newColor;
-                    }
-
-                    // Actualiza el texto de mejoras y dinero.
-                    UpdateUpgradeText();
-                    UpdateDineroUI();
-                }
-                else
-                {
-                    Debug.Log("Dinero insuficiente para mejorar.");
-                }
-            }
-            else if (upgradeCount >= maxUpgrades)
-            {
-                Debug.Log("Mejoras completas. El objeto est· al m·ximo.");
-            }
+            dinero -= costo;
+            return true;
         }
-        else if (other.CompareTag("mercado"))
-        {
-            ComprarEnMercado();
-        }
+
+        Debug.Log("‚ùå Dinero insuficiente para mejorar.");
+        return false;
     }
 
+    // ============================================================
+    // üõí MERCADO
+    // ============================================================
     private void ComprarEnMercado()
     {
-        if (dinero >= 50)
+        const int costo = 50;
+
+        if (!PuedePagar(costo))
         {
-            dinero -= 50;
-            Debug.Log("Compra realizada. Dinero restante: $" + dinero);
-            UpdateDineroUI();
+            Debug.Log("‚ùå No tienes suficiente dinero para comprar en el mercado.");
+            return;
         }
+
+        Debug.Log($"ü™ô Compra realizada por ${costo}. Dinero restante: ${dinero}");
+        UpdateDineroUI();
+    }
+
+    // ============================================================
+    // üé® VISUAL / UI
+    // ============================================================
+    private void AplicarColor(Color color)
+    {
+        if (upgradeRenderer == null) return;
+
+        if (usarMaterialCompartido)
+            upgradeRenderer.sharedMaterial.color = color;
         else
-        {
-            Debug.Log("Dinero insuficiente para comprar en el mercado.");
-        }
+            upgradeRenderer.material.color = color;
     }
 
     private void UpdateUpgradeText()
     {
         if (upgradeText != null)
-        {
-            upgradeText.text = upgradeCount + "/" + maxUpgrades;
-        }
-        else
-        {
-            Debug.LogWarning("No se ha asignado un TextMeshProUGUI para las mejoras.");
-        }
+            upgradeText.text = $"{upgradeCount}/{maxUpgrades}";
     }
 
     private void UpdateDineroUI()
     {
         if (dineroText != null)
-        {
-            dineroText.text = "Dinero: $" + dinero;
-        }
-        else
-        {
-            Debug.LogWarning("No se ha asignado un TextMeshProUGUI para el dinero.");
-        }
+            dineroText.text = $"Dinero: ${dinero}";
+    }
+
+    private System.Collections.IEnumerator FlashUpgradeColor()
+    {
+        if (upgradeRenderer == null) yield break;
+
+        Color original = upgradeRenderer.sharedMaterial.color;
+        upgradeRenderer.sharedMaterial.color = Color.yellow;
+        yield return new WaitForSeconds(0.15f);
+        upgradeRenderer.sharedMaterial.color = original;
+    }
+    public void AgregarDinero(int cantidad)
+    {
+        dinero += cantidad;
+        UpdateDineroUI();
+        Debug.Log($"üíµ Dinero agregado: +${cantidad}. Total: ${dinero}");
     }
 }

@@ -120,7 +120,7 @@ GameObject:
   - component: {fileID: -7923651355519947525}
   m_Layer: 3
   m_Name: arbol_normal
-  m_TagString: Untagged
+  m_TagString: Arbol
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

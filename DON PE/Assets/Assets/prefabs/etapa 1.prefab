@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &3167156027360274407
+--- !u!1 &730825899446994316
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,48 +8,48 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 882564741869675010}
-  - component: {fileID: 6798128734518591202}
-  - component: {fileID: 1255445477387825183}
-  - component: {fileID: 8274532070039394181}
-  - component: {fileID: 4445658674876230179}
+  - component: {fileID: 2567581396669340066}
+  - component: {fileID: 1278955002986965138}
+  - component: {fileID: 2323606863434624013}
+  - component: {fileID: 8315954945369467313}
+  - component: {fileID: 7987685878722420764}
   m_Layer: 0
-  m_Name: unidad de trigo (916)
-  m_TagString: trigo
+  m_Name: etapa 1
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &882564741869675010
+--- !u!4 &2567581396669340066
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3167156027360274407}
+  m_GameObject: {fileID: 730825899446994316}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5.41, y: 4.116022, z: 84.45}
-  m_LocalScale: {x: 0.4, y: 1.49, z: 0.4}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 62.977432, y: 1.234, z: 37.67891}
+  m_LocalScale: {x: 0.2, y: 0.3, z: 0.2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &6798128734518591202
+--- !u!33 &1278955002986965138
 MeshFilter:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3167156027360274407}
+  m_GameObject: {fileID: 730825899446994316}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
---- !u!23 &1255445477387825183
+--- !u!23 &2323606863434624013
 MeshRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3167156027360274407}
+  m_GameObject: {fileID: 730825899446994316}
   m_Enabled: 1
   m_CastShadows: 1
   m_ReceiveShadows: 1
@@ -85,13 +85,13 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
---- !u!65 &8274532070039394181
+--- !u!65 &8315954945369467313
 BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3167156027360274407}
+  m_GameObject: {fileID: 730825899446994316}
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -106,16 +106,22 @@ BoxCollider:
   serializedVersion: 3
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &4445658674876230179
+--- !u!114 &7987685878722420764
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3167156027360274407}
+  m_GameObject: {fileID: 730825899446994316}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 18b4b4f8778d7b147a785d531dfdd6bf, type: 3}
+  m_Script: {fileID: 11500000, guid: f9e93859148dbb14a8695064e2cb9126, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vida: 60
+  siguienteEtapaPrefab: {fileID: 89631943957689776, guid: a26cba2f1937e2e42b34a053da8e42bb, type: 3}
+  tiempoParaSiguiente: 10
+  esFinal: 0
+  fxCambio: {fileID: 0}
+  sfxCambio: {fileID: 0}
+  variacionEscala: 0.5
+  variacionRotacion: 10

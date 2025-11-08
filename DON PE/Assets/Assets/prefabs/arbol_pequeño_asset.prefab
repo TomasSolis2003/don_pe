@@ -79,6 +79,9 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 217982323043667039, guid: 7e509b3766e16ac42a8edab4b15e473a, type: 3}
       insertIndex: -1
       addedObject: {fileID: -7426630762518088797}
+    - targetCorrespondingSourceObject: {fileID: 217982323043667039, guid: 7e509b3766e16ac42a8edab4b15e473a, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7598999481026027481}
   m_SourcePrefab: {fileID: 100100000, guid: 7e509b3766e16ac42a8edab4b15e473a, type: 3}
 --- !u!1 &2131022609030436893 stripped
 GameObject:
@@ -97,9 +100,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd2651fef485a84597246a0f8a51258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  esGigante: 0
-  troncosNormales: 3
-  troncosGigantes: 8
-  vidaNormal: 3
-  vidaGigante: 6
+  golpesNecesarios: 5
   prefabTronco: {fileID: 0}
+  cantidadTroncos: 3
+  sueloFertil: {fileID: 0}
+  desplazamientoGolpe: 0.5
+  velocidadRebote: 8
+--- !u!65 &7598999481026027481
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2131022609030436893}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.1111255, y: 3.732719, z: 0.8258927}
+  m_Center: {x: -0.0028612316, y: 1.8663595, z: -0.00004683435}

@@ -62,8 +62,8 @@ public class Hacha : MonoBehaviour
 
         puedeAtacar = true;
     }
-}
-*/
+}*/
+
 /*using UnityEngine;
 using System.Collections;
 
@@ -176,9 +176,9 @@ public class Hacha : MonoBehaviour
             }
         }
     }
-}
-*/
-using UnityEngine;
+}*/
+
+/*using UnityEngine;
 using System.Collections;
 
 public class Hacha : MonoBehaviour
@@ -267,6 +267,116 @@ public class Hacha : MonoBehaviour
             if (hit.collider.TryGetComponent(out IDañable objeto))
             {
                 objeto.RecibirDaño(1);
+            }
+        }
+    }
+}
+*/
+using UnityEngine;
+using System.Collections;
+
+public class Hacha : MonoBehaviour
+{
+    [Header("Configuración del ataque")]
+    public float tiempoBajada = 0.2f;
+    public float tiempoSubida = 0.4f;
+    public float cooldown = 0.6f;
+
+    [Header("Detección de impacto")]
+    public float rangoGolpe = 2f;
+    public LayerMask capasGolpeables;
+
+    private bool puedeAtacar = true;
+    private Quaternion rotacionInicial;
+    private Transform camaraJugador;
+
+    void Start()
+    {
+        rotacionInicial = transform.localRotation;
+        camaraJugador = Camera.main.transform;
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && puedeAtacar)
+            StartCoroutine(AnimarAtaque());
+    }
+
+    IEnumerator AnimarAtaque()
+    {
+        puedeAtacar = false;
+
+        float t = 0f;
+        bool golpeRealizado = false;
+
+        // --- BAJADA ---
+        while (t < tiempoBajada)
+        {
+            t += Time.deltaTime;
+            transform.localRotation = Quaternion.Lerp(
+                rotacionInicial,
+                Quaternion.Euler(rotacionInicial.eulerAngles + new Vector3(60, 0, 0)),
+                t / tiempoBajada
+            );
+
+            // Golpe en el punto medio del swing
+            if (!golpeRealizado && t >= tiempoBajada * 0.5f)
+            {
+                EjecutarGolpe();
+                golpeRealizado = true;
+            }
+
+            yield return null;
+        }
+
+        // --- SUBIDA ---
+        t = 0f;
+        while (t < tiempoSubida)
+        {
+            t += Time.deltaTime;
+            transform.localRotation = Quaternion.Lerp(
+                Quaternion.Euler(rotacionInicial.eulerAngles + new Vector3(60, 0, 0)),
+                rotacionInicial,
+                t / tiempoSubida
+            );
+            yield return null;
+        }
+
+        transform.localRotation = rotacionInicial;
+
+        float restante = cooldown - (tiempoBajada + tiempoSubida);
+        if (restante > 0) yield return new WaitForSeconds(restante);
+
+        puedeAtacar = true;
+    }
+
+    void EjecutarGolpe()
+    {
+        if (camaraJugador == null)
+            camaraJugador = Camera.main.transform;
+
+        if (Physics.Raycast(camaraJugador.position, camaraJugador.forward, out RaycastHit hit, rangoGolpe, capasGolpeables))
+        {
+            Debug.Log("Golpeó: " + hit.collider.name);
+
+            // 1️⃣ Árbol detectado por tag
+            if (hit.collider.CompareTag("Arbol"))
+            {
+                Arbol arbol = hit.collider.GetComponentInParent<Arbol>();
+                if (arbol != null)
+                {
+                    arbol.RecibirGolpe();
+                    Debug.Log("🌲 Golpe ejecutado sobre " + arbol.name);
+                    return;
+                }
+            }
+
+            // 2️⃣ Cualquier objeto que implemente IDañable
+            if (hit.collider.TryGetComponent(out IDañable objeto))
+            {
+                objeto.RecibirDaño(1);
+                Debug.Log("💥 Daño aplicado a " + hit.collider.name);
+                return;
             }
         }
     }

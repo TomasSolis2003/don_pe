@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 4083500246494685339}
   - component: {fileID: 40182445452460567}
   - component: {fileID: -3242496372875503773}
+  - component: {fileID: 4754024750520938816}
   m_Layer: 3
   m_Name: arbol_gigante_asset
   m_TagString: Arbol
@@ -120,12 +121,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8fd2651fef485a84597246a0f8a51258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  esGigante: 1
-  troncosNormales: 6
-  troncosGigantes: 6
-  vidaNormal: 3
-  vidaGigante: 6
+  golpesNecesarios: 5
   prefabTronco: {fileID: 0}
+  cantidadTroncos: 6
+  sueloFertil: {fileID: 0}
+  desplazamientoGolpe: 0.5
+  velocidadRebote: 8
+--- !u!65 &4754024750520938816
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2570286168392763726}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 0
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 1.9734106, y: 6.7147026, z: 2.646106}
+  m_Center: {x: -0.2630572, y: 3.2350078, z: -0.06528258}
 --- !u!1 &8796585470076761176
 GameObject:
   m_ObjectHideFlags: 0

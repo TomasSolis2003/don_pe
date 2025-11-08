@@ -229,7 +229,7 @@ public class SueloFertil : MonoBehaviour
     }
 }
 */
-using System.Collections.Generic;
+/*using System.Collections.Generic;
 using UnityEngine;
 
 public class SueloFertil : MonoBehaviour
@@ -295,6 +295,7 @@ public class SueloFertil : MonoBehaviour
     }
 
     // ---------------- GENERACIÓN ----------------
+
     void GenerarRecursos()
     {
         // Arma la lista de pedidos en base a las cantidades fijas
@@ -510,6 +511,270 @@ public class SueloFertil : MonoBehaviour
                 var scriptArbol = recurso.GetComponent<Arbol>();
                 if (scriptArbol != null)
                     scriptArbol.Inicializar(this, false, prefabTronco);
+            }
+            break;
+        }
+    }
+}
+*/
+using System.Collections.Generic;
+using UnityEngine;
+
+public class SueloFertil : MonoBehaviour
+{
+    [Header("Cantidades fijas por tipo")]
+    public int cantidadArbolNormal = 20;
+    public int cantidadArbolGigante = 5;
+    public int cantidadRoca = 6;
+    public int cantidadHongo = 4;
+    public int cantidadArbusto = 5;
+
+    [Header("Altura permitida")]
+    public float minAlturaPermitida = -2f;
+    public float maxAlturaPermitida = 3f;
+
+    [Header("Detección del terreno")]
+    public LayerMask capaTerreno;
+
+    [Header("Prefabs principales")]
+    public GameObject arbolNormalPrefab;
+    public GameObject arbolGigantePrefab;
+    public GameObject prefabTronco;
+
+    [Header("Prefabs adicionales")]
+    public GameObject rocaPrefab;
+    public GameObject arbustoMorasPrefab;
+    public GameObject hongoPrefab;
+
+    [Header("Configuración general")]
+    public Vector2 limitesZona = new Vector2(50, 50);
+
+    [Header("Distancias mínimas")]
+    public float distanciaMinNormal = 5f;
+    public float distanciaMinGigante = 10f;
+    public float distanciaMinRoca = 4f;
+    public float distanciaMinHongo = 2f;
+    public float distanciaMinArbusto = 3f;
+
+    [Header("Colisiones y capas")]
+    public LayerMask capaEstructuras;
+
+    private List<Vector3> posicionesUsadas = new List<Vector3>();
+    private int recursosActuales = 0;
+
+    [Header("Bloqueo de crecimiento por estructuras")]
+    [Tooltip("Evita que crezcan árboles cerca de construcciones.")]
+    public List<(Vector3 posicion, float radio)> zonasBloqueadas = new List<(Vector3, float)>();
+
+    private enum TipoRecurso { ArbolNormal, ArbolGigante, Roca, Hongo, Arbusto }
+
+    private struct PedidoSpawn
+    {
+        public TipoRecurso tipo;
+        public GameObject prefab;
+        public float distMin;
+    }
+
+    void Start()
+    {
+        GenerarRecursos();
+    }
+
+    void GenerarRecursos()
+    {
+        List<PedidoSpawn> pedidos = ConstruirPedidos();
+        Mezclar(pedidos);
+
+        const int intentosPorPedido = 30;
+
+        foreach (var pedido in pedidos)
+        {
+            bool colocado = false;
+            for (int i = 0; i < intentosPorPedido && !colocado; i++)
+            {
+                Vector3 pos;
+                if (!ProbarPosicionValida(out pos)) continue;
+                if (!EsPosicionValida(pos, pedido.distMin)) continue;
+
+                GameObject recurso = Instantiate(pedido.prefab, pos, Quaternion.identity);
+                recurso.transform.parent = transform;
+                recurso.transform.localScale = Vector3.one;
+                recurso.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+
+                posicionesUsadas.Add(pos);
+                recursosActuales++;
+
+                // 🔧 Corrección: se eliminó "Inicializar()" y se reemplazó por asignaciones directas
+                if (recurso.CompareTag("Arbol"))
+                {
+                    Arbol scriptArbol = recurso.GetComponent<Arbol>();
+                    if (scriptArbol != null)
+                    {
+                        scriptArbol.sueloFertil = this;
+                        scriptArbol.prefabTronco = prefabTronco;
+                    }
+                }
+
+                colocado = true;
+            }
+        }
+    }
+
+    List<PedidoSpawn> ConstruirPedidos()
+    {
+        var pedidos = new List<PedidoSpawn>();
+
+        void Agregar(TipoRecurso tipo, GameObject prefab, float dist, int cantidad)
+        {
+            if (prefab == null || cantidad <= 0) return;
+            for (int i = 0; i < cantidad; i++)
+                pedidos.Add(new PedidoSpawn { tipo = tipo, prefab = prefab, distMin = dist });
+        }
+
+        Agregar(TipoRecurso.ArbolNormal, arbolNormalPrefab, distanciaMinNormal, cantidadArbolNormal);
+        Agregar(TipoRecurso.ArbolGigante, arbolGigantePrefab, distanciaMinGigante, cantidadArbolGigante);
+        Agregar(TipoRecurso.Roca, rocaPrefab, distanciaMinRoca, cantidadRoca);
+        Agregar(TipoRecurso.Hongo, hongoPrefab, distanciaMinHongo, cantidadHongo);
+        Agregar(TipoRecurso.Arbusto, arbustoMorasPrefab, distanciaMinArbusto, cantidadArbusto);
+
+        return pedidos;
+    }
+
+    void Mezclar<T>(IList<T> lista)
+    {
+        for (int i = lista.Count - 1; i > 0; i--)
+        {
+            int j = Random.Range(0, i + 1);
+            (lista[i], lista[j]) = (lista[j], lista[i]);
+        }
+    }
+
+    bool ProbarPosicionValida(out Vector3 posicionAjustada)
+    {
+        Vector3 basePos = new Vector3(
+            Random.Range(-limitesZona.x / 2f, limitesZona.x / 2f),
+            0f,
+            Random.Range(-limitesZona.y / 2f, limitesZona.y / 2f)
+        ) + transform.position;
+
+        var rayo = new Ray(basePos + Vector3.up * 200f, Vector3.down);
+        if (Physics.Raycast(rayo, out RaycastHit hit, 500f, capaTerreno))
+        {
+            var p = hit.point;
+            if (p.y < minAlturaPermitida || p.y > maxAlturaPermitida)
+            {
+                posicionAjustada = Vector3.zero;
+                return false;
+            }
+
+            posicionAjustada = p;
+            return true;
+        }
+
+        posicionAjustada = Vector3.zero;
+        return false;
+    }
+
+    bool EsPosicionValida(Vector3 nuevaPos, float distanciaMinima)
+    {
+        foreach (Vector3 posExistente in posicionesUsadas)
+        {
+            if (Vector3.Distance(nuevaPos, posExistente) < distanciaMinima)
+                return false;
+        }
+
+        if (Physics.CheckSphere(nuevaPos, 2f, capaEstructuras))
+            return false;
+
+        foreach (var z in zonasBloqueadas)
+        {
+            if (Vector3.Distance(nuevaPos, z.posicion) < z.radio)
+                return false;
+        }
+
+        return true;
+    }
+
+    public void RegistrarEstructura(Vector3 posicion, float radioBloqueo = 6f)
+    {
+        zonasBloqueadas.Add((posicion, radioBloqueo));
+        LimpiarRecursosCercanos(posicion, radioBloqueo);
+    }
+
+    private void LimpiarRecursosCercanos(Vector3 posicion, float radio)
+    {
+        List<Vector3> nuevasPosiciones = new List<Vector3>();
+
+        foreach (var pos in posicionesUsadas)
+        {
+            if (Vector3.Distance(pos, posicion) > radio)
+                nuevasPosiciones.Add(pos);
+            else
+            {
+                Collider[] hits = Physics.OverlapSphere(pos, 1f);
+                foreach (var h in hits)
+                    Destroy(h.gameObject);
+            }
+        }
+
+        posicionesUsadas = nuevasPosiciones;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.green;
+        Gizmos.DrawWireCube(transform.position, new Vector3(limitesZona.x, 0.1f, limitesZona.y));
+
+        Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
+        foreach (var z in zonasBloqueadas)
+            Gizmos.DrawSphere(z.posicion, z.radio);
+
+        Gizmos.color = Color.yellow;
+        foreach (var pos in posicionesUsadas)
+            Gizmos.DrawSphere(pos + Vector3.up * 0.5f, 0.3f);
+    }
+
+    public void ArbolTalado(Vector3 posicionArbol)
+    {
+        posicionesUsadas.Remove(posicionArbol);
+        recursosActuales--;
+        StartCoroutine(ReforestarTrasTiempo());
+    }
+
+    private System.Collections.IEnumerator ReforestarTrasTiempo()
+    {
+        float tiempo = Random.Range(60f, 120f);
+        yield return new WaitForSeconds(tiempo);
+
+        var pedido = new PedidoSpawn
+        {
+            tipo = TipoRecurso.ArbolNormal,
+            prefab = arbolNormalPrefab,
+            distMin = distanciaMinNormal
+        };
+
+        const int intentos = 30;
+        for (int i = 0; i < intentos; i++)
+        {
+            Vector3 pos;
+            if (!ProbarPosicionValida(out pos)) continue;
+            if (!EsPosicionValida(pos, pedido.distMin)) continue;
+
+            GameObject recurso = Instantiate(pedido.prefab, pos, Quaternion.identity, transform);
+            recurso.transform.localScale = Vector3.one;
+            recurso.transform.rotation = Quaternion.Euler(0, Random.Range(0f, 360f), 0);
+
+            posicionesUsadas.Add(pos);
+            recursosActuales++;
+
+            if (recurso.CompareTag("Arbol"))
+            {
+                var scriptArbol = recurso.GetComponent<Arbol>();
+                if (scriptArbol != null)
+                {
+                    scriptArbol.sueloFertil = this;
+                    scriptArbol.prefabTronco = prefabTronco;
+                }
             }
             break;
         }

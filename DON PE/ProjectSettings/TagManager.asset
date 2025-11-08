@@ -23,6 +23,7 @@ TagManager:
   - LoboSalvaje
   - Arbol
   - Consumido
+  - Hacha
   layers:
   - Default
   - TransparentFX

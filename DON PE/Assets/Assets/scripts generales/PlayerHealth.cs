@@ -8,9 +8,13 @@ public class PlayerHealth : MonoBehaviour, IDañoRecibible
     public int vidaMax = 100;
     public int vidaActual;
 
+    [Header("Invulnerabilidad")]
+    public float tiempoInvulnerable = 1.5f;   // segundos de invulnerabilidad
+    private bool esInvulnerable = false;      // bandera para no recibir daño
+
     [Header("UI (opcional)")]
-    public Slider barraVida;                 // Slider con Fill
-    public TextMeshProUGUI textoVida;        // "80 / 100" (opcional)
+    public Slider barraVida;
+    public TextMeshProUGUI textoVida;
 
     void Awake()
     {
@@ -20,9 +24,22 @@ public class PlayerHealth : MonoBehaviour, IDañoRecibible
 
     public void RecibirDaño(int cantidad)
     {
+        // Si está invulnerable, ignorar el daño
+        if (esInvulnerable || vidaActual <= 0)
+            return;
+
         vidaActual = Mathf.Max(vidaActual - Mathf.Abs(cantidad), 0);
         RefrescarUI();
-        if (vidaActual <= 0) Morir();
+
+        if (vidaActual <= 0)
+        {
+            Morir();
+        }
+        else
+        {
+            // Activa invulnerabilidad temporal
+            StartCoroutine(InvulnerabilidadTemporal());
+        }
     }
 
     public void Curar(int cantidad)
@@ -37,9 +54,17 @@ public class PlayerHealth : MonoBehaviour, IDañoRecibible
         if (textoVida) textoVida.text = $"{vidaActual} / {vidaMax}";
     }
 
+    System.Collections.IEnumerator InvulnerabilidadTemporal()
+    {
+        esInvulnerable = true;
+        // Podés poner algún efecto visual acá (parpadeo, color, etc.)
+        yield return new WaitForSeconds(tiempoInvulnerable);
+        esInvulnerable = false;
+    }
+
     void Morir()
     {
-        // TODO: respawn, animación, deshabilitar input, etc.
         Debug.Log("Jugador muerto");
+        // TODO: respawn, animación o desactivar control
     }
 }

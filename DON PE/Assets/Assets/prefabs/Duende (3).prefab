@@ -124,7 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabTierraSinPreparar: {fileID: 0}
   radioDeteccion: 20.8
-  intervaloBusqueda: 0.5
+  intervaloBusqueda: 2
   capasDetectables:
     serializedVersion: 2
     m_Bits: 201
@@ -147,6 +147,8 @@ MonoBehaviour:
   vidaMaxima: 20
   radioMerodeo: 10
   tiempoEsperaPatrulla: 3
+  radioBusquedaInicial: 50
+  intervaloPistas: 5
   duracionHuida: 15
   viasDeEscape:
   - {fileID: 0}

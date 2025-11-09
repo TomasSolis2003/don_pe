@@ -24,6 +24,7 @@ TagManager:
   - Arbol
   - Consumido
   - Hacha
+  - Escape
   layers:
   - Default
   - TransparentFX

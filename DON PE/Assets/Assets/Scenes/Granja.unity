@@ -3477,7 +3477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   dayLengthInMinutes: 2
-  startHour: 10
+  startHour: 21.62
   sunriseHour: 9
   sunsetHour: 1
   sol: {fileID: 705507994}
@@ -6299,6 +6299,63 @@ MonoBehaviour:
   botones:
   - {fileID: 1024034337}
   - {fileID: 1273733107}
+--- !u!1001 &1067550350
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 1141251792182109237, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_Name
+      value: Duende (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 73.26463
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 2.0000029
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 154.43594
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7559670292393816231, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
 --- !u!1 &1078601417
 GameObject:
   m_ObjectHideFlags: 0
@@ -12257,7 +12314,7 @@ GameObject:
   - component: {fileID: 1205531537}
   m_Layer: 0
   m_Name: zona de huida (2)
-  m_TagString: Untagged
+  m_TagString: Escape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -12362,7 +12419,7 @@ GameObject:
   - component: {fileID: 1221479120}
   m_Layer: 0
   m_Name: zona de huida (3)
-  m_TagString: Untagged
+  m_TagString: Escape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14213,7 +14270,7 @@ GameObject:
   - component: {fileID: 1528088215}
   m_Layer: 0
   m_Name: zona de huida (1)
-  m_TagString: Untagged
+  m_TagString: Escape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -14498,7 +14555,7 @@ GameObject:
   - component: {fileID: 1545293883}
   m_Layer: 0
   m_Name: zona de huida
-  m_TagString: Untagged
+  m_TagString: Escape
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -15042,7 +15099,7 @@ Transform:
   m_GameObject: {fileID: 1639523564}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 62, y: 5, z: 163.25}
+  m_LocalPosition: {x: 76, y: 5, z: 65.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -15153,6 +15210,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vidaMax: 100
   vidaActual: 0
+  tiempoInvulnerable: 1.5
   barraVida: {fileID: 1859582118}
   textoVida: {fileID: 1648757878}
 --- !u!114 &1639523579
@@ -18064,10 +18122,19 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   prefabEnemigo: {fileID: 1141251792182109237, guid: 79a08841315bb9746a6f0cfd8963cc8b, type: 3}
   "tama\xF1oArea": {x: 100, y: 100}
-  maxEnemigosPorNoche: 3
+  maxEnemigosPorNoche: 8
+  multiplicadorFrecuencia: 1.8
   capaTerreno:
     serializedVersion: 2
     m_Bits: 256
+  jugador: {fileID: 1639523569}
+  prefabTierraSinPreparar: {fileID: 7251885443265564235, guid: 88679ae343e189644a7be3b0651ea3b5, type: 3}
+  viasDeEscape:
+  - {fileID: 1545293886}
+  - {fileID: 1528088218}
+  - {fileID: 1205531540}
+  - {fileID: 1221479123}
+  tiempoEntreSpawns: 0.5
 --- !u!4 &1995859786
 Transform:
   m_ObjectHideFlags: 0
@@ -19673,3 +19740,4 @@ SceneRoots:
   - {fileID: 1320040055}
   - {fileID: 518790661}
   - {fileID: 1995859786}
+  - {fileID: 1067550350}

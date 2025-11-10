@@ -10,6 +10,7 @@ public class SpawnerHorda : MonoBehaviour
 
     [Header("Spawner")]
     public Transform Spawner;            // Referencia al jugador (asignar en inspector)
+    public bool spawnear;
 
     [Header("Altura del terreno (opcional)")]
     public float altura = 0f;            // Si el mapa es plano, usar 0
@@ -18,22 +19,26 @@ public class SpawnerHorda : MonoBehaviour
     {
         if (!Spawner)
         {
-            GameObject p = GameObject.FindGameObjectWithTag("Player");
-            if (p != null) Spawner = p.transform;
+            Spawner = this.transform;
         }
-
+    }
+    private void Update()
+    {
         SpawnEnemigos();
     }
-
     public void SpawnEnemigos()
-    {
-        if (prefabEnemigo == null || Spawner == null) return;
-
-        for (int i = 0; i < cantidad; i++)
+    {   if (spawnear)
         {
-            Vector3 pos = GenerarPosicionLejana();
-            Instantiate(prefabEnemigo, pos, Quaternion.identity);
+            spawnear = false;
+            if (prefabEnemigo == null || Spawner == null) return;
+
+            for (int i = 0; i < cantidad; i++)
+            {
+                Vector3 pos = GenerarPosicionLejana();
+                Instantiate(prefabEnemigo, pos, Quaternion.identity);
+            }
         }
+        
     }
 
     Vector3 GenerarPosicionLejana()

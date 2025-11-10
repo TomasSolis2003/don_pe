@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using TMPro;
 using System.Collections;
 
@@ -10,9 +10,12 @@ public class Reloj : MonoBehaviour
     public float horaActual = 12f;
 
     [Header("Referencias (opcional)")]
-    public TextMeshProUGUI textoEstado;   // "Amanecer", "D�a", "Atardecer", "Noche"
+    public TextMeshProUGUI textoEstado;   // "Amanecer", "Día", "Atardecer", "Noche"
     public TextMeshProUGUI textoHora;     // "10:30 AM"
-    public TextMeshProUGUI textoDia;      // "D�a 1"
+    public TextMeshProUGUI textoDia;      // "Día 1"
+
+    [Header("Spawner de Horda")]
+    public SpawnerHorda Horda;
 
     public enum EstadoDia { Amanecer, Dia, Atardecer, Noche }
     public EstadoDia estadoActual;
@@ -25,7 +28,7 @@ public class Reloj : MonoBehaviour
     void Start()
     {
         if (textoDia != null)
-            textoDia.text = $"D�a {numeroDia}";
+            textoDia.text = $"Día {numeroDia}";
 
         if (textoEstado != null)
             textoEstado.gameObject.SetActive(false);
@@ -38,7 +41,7 @@ public class Reloj : MonoBehaviour
         VerificarCambioDeDia();
     }
 
-    // --- Clasificaci�n del momento del d�a ---
+    // --- Clasificación del momento del día ---
     public void ActualizarEstado()
     {
         horaActual = hora.currentHour;
@@ -77,12 +80,13 @@ public class Reloj : MonoBehaviour
 
         // Fade IN
         Color color = textoEstado.color;
-        for (float t = 0; t < 1f; t += Time.deltaTime / 1f)
+        for (float t = 0; t < 1f; t += Time.deltaTime)
         {
             color.a = Mathf.Lerp(0f, 1f, t);
             textoEstado.color = color;
             yield return null;
         }
+
         color.a = 1f;
         textoEstado.color = color;
 
@@ -90,7 +94,7 @@ public class Reloj : MonoBehaviour
         yield return new WaitForSeconds(duracionVisible);
 
         // Fade OUT
-        for (float t = 0; t < 1f; t += Time.deltaTime / 1f)
+        for (float t = 0; t < 1f; t += Time.deltaTime)
         {
             color.a = Mathf.Lerp(1f, 0f, t);
             textoEstado.color = color;
@@ -117,15 +121,33 @@ public class Reloj : MonoBehaviour
         textoHora.text = $"{horaRedondeada:00}:{minutos:00} {sufijo}";
     }
 
-    // --- Cambio de d�a ---
+    // --- Cambio de día (solo se ejecuta una vez cada 24h) ---
     void VerificarCambioDeDia()
     {
+        // Detecta cuando pasa de 23.99 -> 0
         if (horaActual < ultimaHora)
         {
             numeroDia++;
+
             if (textoDia != null)
-                textoDia.text = $"D�a {numeroDia}";
+                textoDia.text = $"Día {numeroDia}";
+
+            // 🧩 SOLO AQUÍ se ejecuta la verificación (una vez por día)
+            if (Horda != null)
+            {
+                if (numeroDia % 5 == 0)
+                {
+                    Horda.spawnear = true;
+                    Debug.Log($"✅ Horda activada en el Día {numeroDia}");
+                }
+                else
+                {
+                    Horda.spawnear = false;
+                    Debug.Log($"🕓 Día {numeroDia}, sin horda");
+                }
+            }
         }
+
         ultimaHora = horaActual;
     }
 }

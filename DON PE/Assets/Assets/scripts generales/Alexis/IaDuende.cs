@@ -156,7 +156,22 @@ public class IaDuende : MonoBehaviour
             agent.SetDestination(wanderTarget);
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("Hacha"))
+        {
+            // Obtener el script del hacha
+            HachaA hacha = other.GetComponent<HachaA>();
 
+            // Si el hacha existe y está atacando → hace daño al duende
+            if (hacha != null && hacha.isAttacking)
+            {
+                TakeDamage(hacha.hitDamage); // usa el daño del hacha
+                Debug.Log("Duende recibió daño del hacha");
+            }
+        }
+    }
+   
     // ----------------------------
     // DAÑO Y VIDA
     // ----------------------------

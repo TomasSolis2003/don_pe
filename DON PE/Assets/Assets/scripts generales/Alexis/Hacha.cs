@@ -7,6 +7,8 @@ public class HachaA : MonoBehaviour
 
     public float attackDuration = 0.4f;
     public bool isAttacking = false;
+    public int hitDamage = 20;
+    public Collider hitbox;
 
     private Quaternion originalRotation;
     private Vector3 originalPosition;
@@ -15,6 +17,7 @@ public class HachaA : MonoBehaviour
     {
         originalRotation = transform.localRotation;
         originalPosition = transform.localPosition;
+        hitbox.enabled = false;
     }
 
     void Update()
@@ -27,6 +30,7 @@ public class HachaA : MonoBehaviour
 
     private System.Collections.IEnumerator AttackRoutine()
     {
+        hitbox.enabled = true;
         isAttacking = true;
 
         if (animator != null)
@@ -67,5 +71,6 @@ public class HachaA : MonoBehaviour
             animator.SetBool(attackBool, false);
 
         isAttacking = false;
+        hitbox.enabled = false;
     }
 }

@@ -1,93 +1,108 @@
 using UnityEngine;
 
-
-using System.Collections;
-using System.Collections.Generic;
-
-
 public class PlayerController : MonoBehaviour
 {
-    public float moveSpeed = 5f; // Velocidad de movimiento
-    public float mouseSensitivity = 100f; // Sensibilidad del ratón
-    public float jumpForce = 5f; // Fuerza del salto
-    public Transform playerBody; // Transform del cuerpo del jugador
-    public Transform cameraTransform; // Transform de la cámara
+    [Header("Movimiento")]
+    public float moveSpeed = 5f;
+    public float jumpForce = 5f;
 
-    private Rigidbody rb; // Referencia al Rigidbody del jugador
-    private float xRotation = 0f; // Control de la rotación en el eje X (vertical)
-    private bool isGrounded; // Indica si el jugador está en el suelo
+    [Header("Cámara")]
+    public float mouseSensitivity = 100f;
+    public float mouseSmooth = 0.05f; // suavizado opcional
+    public Transform playerBody;
+    public Transform cameraTransform;
+
+    private Rigidbody rb;
+
+    private float xRotation = 0f;
+    private bool isGrounded;
+
+    // Suavizado
+    private float smoothX, smoothY;
+    private float smoothVelocityX, smoothVelocityY;
 
     void Start()
     {
-        // Ocultar y bloquear el cursor en el centro de la pantalla
         Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible=false;
-        // Obtener el Rigidbody del jugador
+        Cursor.visible = false;
+
         rb = playerBody.GetComponent<Rigidbody>();
+        rb.freezeRotation = true;  // evita que el rigidbody rote por colisiones
     }
 
     void Update()
     {
-        //si es visible osea modo construccion no puede moverse
         if (!Cursor.visible)
         {
-            // --- Movimiento del ratón para rotar la cámara y el cuerpo del jugador ---
-
-            // Obtener el movimiento del ratón en los ejes X e Y
-            float mouseX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
-            float mouseY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
-
-            // Rotar la cámara en el eje X (vertical, hacia arriba/abajo)
-            xRotation -= mouseY;
-            xRotation = Mathf.Clamp(xRotation, -90f, 90f); // Limitar la rotación para no mirar completamente hacia arriba/abajo
-
-            // Aplicar la rotación a la cámara
-            cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
-
-            // Rotar el cuerpo del jugador en el eje Y (horizontal, izquierda/derecha)
-            playerBody.Rotate(Vector3.up * mouseX);
-
-            // --- Movimiento del jugador ---
-
-            // Capturar las entradas del teclado para movimiento
-            float moveX = Input.GetAxis("Horizontal"); // Flechas izquierda/derecha o teclas A/D
-            float moveZ = Input.GetAxis("Vertical"); // Flechas arriba/abajo o teclas W/S
-
-            // Crear un vector de movimiento en relación a la cámara
-            Vector3 move = cameraTransform.right * moveX + cameraTransform.forward * moveZ;
-
-            // Evitar que el personaje se mueva hacia arriba/abajo (solo mover en X y Z)
-            move.y = 0f;
-
-            // Mover el personaje según la velocidad
-            playerBody.Translate(move * moveSpeed * Time.deltaTime, Space.World);
-
-            // --- Saltar ---
-            // Saltar si se presiona la tecla Espacio y el jugador está en el suelo
-            if (Input.GetButtonDown("Jump") && isGrounded)
-            {
-                rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
-            }
+            LookAround();
+            Move();
+            Jump();
         }
-       
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Cursor.visible = !Cursor.visible;
+        }
     }
 
-    // Método para detectar si el jugador está tocando el suelo (objetos con tag "Ground")
+    // ------------------------------
+    //      ROTACIÓN DE LA CÁMARA
+    // ------------------------------
+    void LookAround()
+    {
+        float mouseX = Input.GetAxisRaw("Mouse X");
+        float mouseY = Input.GetAxisRaw("Mouse Y");
+
+        // Suavizado (opcional)
+        smoothX = Mathf.SmoothDamp(smoothX, mouseX, ref smoothVelocityX, mouseSmooth);
+        smoothY = Mathf.SmoothDamp(smoothY, mouseY, ref smoothVelocityY, mouseSmooth);
+
+        float rotX = smoothX * mouseSensitivity * Time.deltaTime;
+        float rotY = smoothY * mouseSensitivity * Time.deltaTime;
+
+        // Rotación vertical de la cámara
+        xRotation -= rotY;
+        xRotation = Mathf.Clamp(xRotation, -80f, 80f);
+        cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
+
+        // Rotación horizontal del jugador
+        playerBody.Rotate(Vector3.up * rotX);
+    }
+
+    // ------------------------------
+    //      MOVIMIENTO
+    // ------------------------------
+    void Move()
+    {
+        float x = Input.GetAxisRaw("Horizontal");
+        float z = Input.GetAxisRaw("Vertical");
+
+        Vector3 direction = (playerBody.forward * z + playerBody.right * x).normalized;
+
+        Vector3 velocity = new Vector3(direction.x * moveSpeed, rb.velocity.y, direction.z * moveSpeed);
+        rb.velocity = velocity;
+    }
+
+    // ------------------------------
+    //      SALTO
+    // ------------------------------
+    void Jump()
+    {
+        if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
+        {
+            rb.AddForce(Vector3.up * jumpForce, ForceMode.Impulse);
+        }
+    }
+
+    // Colisiones con el suelo
     private void OnCollisionStay(Collision collision)
     {
-        // Verifica si el jugador está en contacto con un objeto que tiene el tag "Ground"
         if (collision.gameObject.CompareTag("Ground"))
-        {
             isGrounded = true;
-        }
     }
 
     private void OnCollisionExit(Collision collision)
     {
-        // Cuando el jugador deja de estar en contacto con el suelo, isGrounded se vuelve false
         if (collision.gameObject.CompareTag("Ground"))
-        {
             isGrounded = false;
-        }
     }
 }

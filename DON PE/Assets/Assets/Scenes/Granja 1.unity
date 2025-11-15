@@ -15223,6 +15223,47 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1998641537}
   m_CullTransparentMesh: 1
+--- !u!1001 &2026280473
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 566711690538334855, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_Name
+      value: Arbol
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.19
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 78.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: -90
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3772728411267218796, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 1747d4a8372194546b4afff0f597db99, type: 3}
 --- !u!1 &2042426341
 GameObject:
   m_ObjectHideFlags: 0
@@ -16415,3 +16456,4 @@ SceneRoots:
   - {fileID: 1021087953}
   - {fileID: 1823979288}
   - {fileID: 5257744204168624743}
+  - {fileID: 2026280473}

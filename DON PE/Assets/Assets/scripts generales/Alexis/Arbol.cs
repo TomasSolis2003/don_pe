@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System.Collections;
 
 public class ArbolA : MonoBehaviour
 {
@@ -14,23 +15,37 @@ public class ArbolA : MonoBehaviour
     [Header("Shake (temblor)")]
     public float shakeAmount = 0.1f;
     public float shakeSpeed = 15f;
-    private bool isShaking = false;
     private Vector3 initialRotation;
 
-    [Header("Destrucción")]
-    public float fallSpeed = 50f;
+    [Header("Destrucción / Respawn")]
+    public float timeOnGround = 2f;
+    public float respawnTime = 5f;
+
+    [Header("Loot")]
+    public GameObject troncoPrefab;
+
     private bool isFalling = false;
+
+    // Referencias
+    private MeshRenderer mesh;
+    private Collider col;
+    private Quaternion initialRotQ;
+    private Vector3 initialPos;
 
     private void Start()
     {
         currentHealth = maxHealth;
         initialRotation = transform.eulerAngles;
+        initialRotQ = transform.rotation;
+        initialPos = transform.position;
+
+        mesh = GetComponentInChildren<MeshRenderer>();
+        col = GetComponent<Collider>();
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        // Cualquier objeto con Tag "Player" o "Axe"
-        if (other.CompareTag("Hacha")&&(other.GetComponent<HachaA>().isAttacking))
+        if (other.CompareTag("Hacha") && other.GetComponent<HachaA>().isAttacking)
         {
             TakeDamage(hitDamage);
         }
@@ -38,29 +53,28 @@ public class ArbolA : MonoBehaviour
 
     void TakeDamage(float amount)
     {
-        if (!canTakeDamage) return;
+        if (!canTakeDamage || isFalling) return;
 
         currentHealth -= amount;
+
         StartCoroutine(DamageCooldown());
         StartCoroutine(ShakeTree());
 
-        if (currentHealth <= 0 && !isFalling)
+        if (currentHealth <= 0)
         {
-            StartCoroutine(FallAndDestroy());
+            StartCoroutine(FallAndRespawn());
         }
     }
 
-    System.Collections.IEnumerator DamageCooldown()
+    IEnumerator DamageCooldown()
     {
         canTakeDamage = false;
         yield return new WaitForSeconds(hitCooldown);
         canTakeDamage = true;
     }
 
-    System.Collections.IEnumerator ShakeTree()
+    IEnumerator ShakeTree()
     {
-        isShaking = true;
-
         float t = 0;
         while (t < 0.2f)
         {
@@ -71,34 +85,77 @@ public class ArbolA : MonoBehaviour
         }
 
         transform.eulerAngles = initialRotation;
-        isShaking = false;
     }
 
-    System.Collections.IEnumerator FallAndDestroy()
+    IEnumerator FallAndRespawn()
     {
         isFalling = true;
+        col.enabled = false;
 
+        // ANIMACIÓN DE CAÍDA
         Quaternion startRot = transform.rotation;
         Quaternion endRot = Quaternion.Euler(
-            transform.eulerAngles.x + 90f,   // cae hacia adelante
+            transform.eulerAngles.x + 90f,
             transform.eulerAngles.y,
             transform.eulerAngles.z
         );
 
         float t = 0;
-
-        // Animación de caída
         while (t < 1f)
         {
-            t += Time.deltaTime * 0.7f; // velocidad de caída
+            t += Time.deltaTime * 0.7f;
             transform.rotation = Quaternion.Slerp(startRot, endRot, t);
             yield return null;
         }
 
-        // 🔥 Esperar X segundos en el piso antes de desaparecer
-        yield return new WaitForSeconds(2f);  // <-- CAMBIA ESTE VALOR A LO QUE QUIERAS
+        // Queda tirado en el piso
+        yield return new WaitForSeconds(timeOnGround);
 
-        Destroy(gameObject);
+        // ❗ Spawn de troncos
+        SpawnTroncosCaidos();
+
+        // Ocultar árbol
+        mesh.enabled = false;
+
+        yield return new WaitForSeconds(respawnTime);
+
+        RespawnTree();
     }
 
+   void SpawnTroncosCaidos()
+{
+    if (troncoPrefab == null) return;
+
+    // Rotación acostada (90° en X)
+    Quaternion rot = Quaternion.Euler(90f, transform.eulerAngles.y, 0f);
+
+    float startOffset = 0.3f;   // hacia adelante desde el centro
+    float spacing = 0.8f;       // distancia entre troncos
+    float heightOffset = 0.2f;  // ALTURA para que caigan con RB
+
+    // Punto inicial: centro + adelante + arriba
+    Vector3 startPos = transform.position +
+                       transform.forward * startOffset +
+                       Vector3.up * heightOffset;
+
+    for (int i = 0; i < 3; i++)
+    {
+        Vector3 pos = startPos + transform.forward * (i * spacing);
+        Instantiate(troncoPrefab, pos, rot);
+    }
+}
+
+
+
+    void RespawnTree()
+    {
+        currentHealth = maxHealth;
+        isFalling = false;
+
+        transform.position = initialPos;
+        transform.rotation = initialRotQ;
+
+        mesh.enabled = true;
+        col.enabled = true;
+    }
 }

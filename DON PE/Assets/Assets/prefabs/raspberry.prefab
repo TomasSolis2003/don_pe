@@ -123,3 +123,5 @@ MonoBehaviour:
   destruirAlComer: 1
   distanciaInteraccion: 2
   teclaComer: 101
+  sonidoComer: {fileID: 8300000, guid: 36a9f696918262d449af53308f388efe, type: 3}
+  fuenteAudio: {fileID: 0}

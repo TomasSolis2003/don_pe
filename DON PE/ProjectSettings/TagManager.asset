@@ -25,6 +25,7 @@ TagManager:
   - Consumido
   - Hacha
   - Escape
+  - estructura
   layers:
   - Default
   - TransparentFX

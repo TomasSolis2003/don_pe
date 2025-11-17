@@ -156,7 +156,7 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   distanciaLlegadaEscape: 1.5
-  sonidoHuida: {fileID: 0}
+  sonidoHuida: {fileID: 8300000, guid: 8c57c653555c86d458c52c8764ead830, type: 3}
   particulasHuida: {fileID: 0}
   dibujarGizmos: 1
 --- !u!195 &3296195281404168611

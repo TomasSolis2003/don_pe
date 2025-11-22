@@ -22,7 +22,7 @@ public class HachaA : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !Cursor.visible)
         {
             StartCoroutine(AttackRoutine());
         }

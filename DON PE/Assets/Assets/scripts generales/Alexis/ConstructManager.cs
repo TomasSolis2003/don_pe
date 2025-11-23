@@ -8,6 +8,7 @@ public class ConstructManager : MonoBehaviour
 
     [Header("Jugador / Cámara")]
     public Transform playerCamera;
+    public InvYcons jugador;
 
     [Header("Opciones")]
     public float shortRayDistance = 3f;   // Distancia máxima del preview
@@ -20,6 +21,7 @@ public class ConstructManager : MonoBehaviour
     private GameObject previewObject;
     private Quaternion previewRotation = Quaternion.identity;
     private bool canBuild = false;
+    private int costoActual = 0;
 
     void Update()
     {
@@ -36,13 +38,22 @@ public class ConstructManager : MonoBehaviour
     // -------------------------------------------------------
     //  SELECCIONAR PREFAB
     // -------------------------------------------------------
-    public void SeleccionarConstruccion(int index)
+    public void SeleccionarConstruccion(int index, int Ctroncos)
     {
-        if (index < 0 || index >= prefabs.Count)
-            return;
+        if (jugador.troncos >= Ctroncos)
+        {
+            jugador.ModoConstruccion();
+            if (index < 0 || index >= prefabs.Count)
+                return;
 
-        selectedIndex = index;
-        CreatePreview();
+            selectedIndex = index;
+            costoActual = Ctroncos;   // Guardamos el costo
+            CreatePreview();
+        }
+        else
+        {
+            Debug.Log("Faltan troncos para construir");
+        }
     }
 
     // -------------------------------------------------------
@@ -159,6 +170,17 @@ public class ConstructManager : MonoBehaviour
 
         foreach (Transform t in realObj.GetComponentsInChildren<Transform>())
             t.gameObject.layer = LayerMask.NameToLayer("Estructura");
+
+        // 🔥 RESTAR RECURSOS
+        jugador.troncos -= costoActual;
+
+        // 🔥 BORRAR PREVIEW
+        Destroy(previewObject);
+        previewObject = null;
+
+        // 🔥 SALIR DEL MODO CONSTRUCCIÓN
+        selectedIndex = -1;
+        costoActual = 0;
     }
 
     // -------------------------------------------------------

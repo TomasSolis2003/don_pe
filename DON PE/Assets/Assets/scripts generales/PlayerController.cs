@@ -1,4 +1,4 @@
-using UnityEngine;
+Ôªøusing UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -6,7 +6,7 @@ public class PlayerController : MonoBehaviour
     public float moveSpeed = 5f;
     public float jumpForce = 5f;
 
-    [Header("C·mara")]
+    [Header("C√°mara")]
     public float mouseSensitivity = 100f;
     public float mouseSmooth = 0.05f; // suavizado opcional
     public Transform playerBody;
@@ -23,11 +23,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        Cursor.lockState = CursorLockMode.Locked;   // cursor bloqueado al centro, no puede salir
+        Cursor.visible = false;                     // ocultar cursor
 
         rb = playerBody.GetComponent<Rigidbody>();
-        rb.freezeRotation = true;  // evita que el rigidbody rote por colisiones
+        rb.freezeRotation = true;
+
     }
 
     void Update()
@@ -45,7 +46,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // ------------------------------
-    //      ROTACI”N DE LA C¡MARA
+    //      ROTACI√ìN DE LA C√ÅMARA
     // ------------------------------
     void LookAround()
     {
@@ -59,12 +60,12 @@ public class PlayerController : MonoBehaviour
         float rotX = smoothX * mouseSensitivity * Time.deltaTime;
         float rotY = smoothY * mouseSensitivity * Time.deltaTime;
 
-        // RotaciÛn vertical de la c·mara
+        // Rotaci√≥n vertical de la c√°mara
         xRotation -= rotY;
         xRotation = Mathf.Clamp(xRotation, -80f, 80f);
         cameraTransform.localRotation = Quaternion.Euler(xRotation, 0f, 0f);
 
-        // RotaciÛn horizontal del jugador
+        // Rotaci√≥n horizontal del jugador
         playerBody.Rotate(Vector3.up * rotX);
     }
 

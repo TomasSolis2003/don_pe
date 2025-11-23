@@ -9,6 +9,7 @@ public class HachaA : MonoBehaviour
     public bool isAttacking = false;
     public int hitDamage = 20;
     public Collider hitbox;
+    public float disX, disZ;
 
     private Quaternion originalRotation;
     private Vector3 originalPosition;
@@ -22,7 +23,7 @@ public class HachaA : MonoBehaviour
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0) && !isAttacking)
+        if (Input.GetMouseButtonDown(0) && !isAttacking && !Cursor.visible)
         {
             StartCoroutine(AttackRoutine());
         }
@@ -40,7 +41,7 @@ public class HachaA : MonoBehaviour
         Quaternion attackRotation = Quaternion.Euler(0f, 50f, 40f);
 
         // Movimiento hacia la izquierda (X negativo)
-        Vector3 attackPosition = originalPosition + new Vector3(-0.2f, 0f, 0.2f);
+        Vector3 attackPosition = originalPosition + new Vector3(disX, 0f, disZ);
 
         float t = 0;
         while (t < 1)

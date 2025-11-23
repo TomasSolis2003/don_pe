@@ -18,7 +18,7 @@ public class ArbolA : MonoBehaviour
     private Vector3 initialRotation;
 
     [Header("Destrucción / Respawn")]
-    public float timeOnGround = 2f;
+    public float timeOnGround = 1f;
     public float respawnTime = 5f;
 
     [Header("Loot")]

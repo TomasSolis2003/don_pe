@@ -119,8 +119,8 @@ GameObject:
   - component: {fileID: 1926053562153663302}
   - component: {fileID: 8194711008286550754}
   - component: {fileID: 5957867011629553699}
-  - component: {fileID: 6080870171580287978}
   - component: {fileID: 5117928483648322132}
+  - component: {fileID: 8495169144562085700}
   m_Layer: 0
   m_Name: TroncoA
   m_TagString: Untagged
@@ -217,18 +217,6 @@ CapsuleCollider:
   m_Height: 2.5
   m_Direction: 1
   m_Center: {x: 0.000000059604645, y: 0, z: -0.00000008940697}
---- !u!114 &6080870171580287978
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6446704458409601649}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27d542e8d8201e14291d3d6fd92ba7d1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!54 &5117928483648322132
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -256,3 +244,17 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 112
   m_CollisionDetection: 0
+--- !u!114 &8495169144562085700
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6446704458409601649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0169dcf335e8a30499b0b3607e90aaf4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Item: tronco
+  cantidad: 10

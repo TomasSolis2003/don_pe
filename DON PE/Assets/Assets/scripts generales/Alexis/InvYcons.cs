@@ -6,13 +6,9 @@ using UnityEngine;
 public class InvYcons : MonoBehaviour
 {
     [Header("Inventario")]
-    public int troncos = 0; // Cantidad de troncos en inventario
+    public int troncos = 0;
+    public int bayas = 0;
     public TextMeshProUGUI troncosTexto;
-
-    [Header("Construcción")]
-    public GameObject prefabConstruccion; // Prefab que se va a construir
-    public LayerMask sueloLayer; // Layer del suelo
-    public float alturaMinima = 0f; // No construir por debajo de esta altura
 
     [Header("UI")]
     public GameObject panelConstruccion;
@@ -26,67 +22,40 @@ public class InvYcons : MonoBehaviour
     {
         ActualizarUI();
 
-        if (Input.GetMouseButtonDown(0)) // Click izquierdo
-        {
-            IntentarConstruir();
-        }
         if (Input.GetKeyDown(KeyCode.P))
         {
-          
-            construccionActiva = !construccionActiva;
-           
-            panelConstruccion.SetActive(construccionActiva);
-            Cursor.visible = construccionActiva;
-            if (construccionActiva)
-            {
-                Cursor.lockState = CursorLockMode.None;
-            }
-            else
-            {
-                Cursor.lockState = CursorLockMode.Locked;
-            }  
-
+            ModoConstruccion();
         }
     }
-
     void ActualizarUI()
     {
         if (troncosTexto != null)
             troncosTexto.text = "Troncos: " + troncos;
     }
-
-    void IntentarConstruir()
+    public void Almacenar(string item, int cantidad)
     {
-        if (troncos <= 0)
+        if (item == "tronco")
         {
-            Debug.Log("No tienes suficientes troncos.");
-            return;
+            troncos += cantidad;
         }
-
-        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        RaycastHit hit;
-
-        // Detecta si el raycast golpea el suelo
-        if (Physics.Raycast(ray, out hit, 100f, sueloLayer))
+        else if (item == "baya")
         {
-            Vector3 posicionConstruccion = hit.point;
+            bayas += cantidad;
+        }
+    }
+    public void ModoConstruccion()
+    {
+        construccionActiva = !construccionActiva;
 
-            // Evita construir por debajo del suelo
-            if (posicionConstruccion.y < alturaMinima)
-            {
-                Debug.Log("No se puede construir más abajo del suelo.");
-                return;
-            }
-
-            // Instancia el objeto
-            Instantiate(prefabConstruccion, posicionConstruccion, Quaternion.identity);
-
-            // Resta los troncos necesarios (1 por ejemplo)
-            troncos--;
+        panelConstruccion.SetActive(construccionActiva);
+        Cursor.visible = construccionActiva;
+        if (construccionActiva)
+        {
+            Cursor.lockState = CursorLockMode.None;
         }
         else
         {
-            Debug.Log("Solo puedes construir sobre el suelo.");
+            Cursor.lockState = CursorLockMode.Locked;
         }
     }
 }

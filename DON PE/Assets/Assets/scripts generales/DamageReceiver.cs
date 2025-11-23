@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+﻿/*using UnityEngine;
 
 public class DamageReceiver : MonoBehaviour, IDañoRecibible
 {
@@ -13,5 +13,26 @@ public class DamageReceiver : MonoBehaviour, IDañoRecibible
     {
         if (animal != null)
             animal.RecibirDaño(cantidad);
+    }
+}
+*/
+using UnityEngine;
+
+public class DamageReceiver : MonoBehaviour, IDañoRecibible
+{
+    private AnimalIA animal;
+
+    void Awake()
+    {
+        animal = GetComponentInParent<AnimalIA>();
+    }
+
+    public void RecibirDaño(int cantidad)
+    {
+        Debug.Log($"[DamageReceiver] Recibí daño {cantidad} en {name}");
+        if (animal != null)
+            animal.RecibirDaño(cantidad);
+        else
+            Debug.LogWarning("[DamageReceiver] No encontré AnimalIA en padres");
     }
 }

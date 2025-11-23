@@ -239,7 +239,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jugador: {fileID: 0}
-  itemDrop: {fileID: 1465799832303144469, guid: 5c38f50273cc903499eb2b451f4dcd6a, type: 3}
+  itemDrop: {fileID: 6207420464462587017, guid: 0ed935c513f49f8458fb8e9aaae0e1b0, type: 3}
   vida: 10
   velocidadCaminata: 2
   velocidadHuida: 6

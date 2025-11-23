@@ -368,6 +368,44 @@ public class Machete : MonoBehaviour
         puedeAtacar = true;
     }
 
+    /* void AtacarCono()
+     {
+         Vector3 origen = Camera.main.transform.position;
+         Vector3 forward = Camera.main.transform.forward;
+
+         Collider[] hits = Physics.OverlapSphere(
+             origen + forward * (rangoGolpe * 0.5f),
+             radioColision,
+             capasAtacables,
+             QueryTriggerInteraction.Ignore
+         );
+
+         foreach (var h in hits)
+         {
+             Vector3 dir = (h.transform.position - origen).normalized;
+             float ang = Vector3.Angle(forward, dir);
+             if (ang <= anguloGolpe * 0.5f)
+             {
+                 // Intento 1: buscar en padre
+                 var dmg = h.GetComponentInParent<IDañoRecibible>();
+
+                 // Intento 2: buscar en la raíz (por si el collider está muy profundo)
+                 if (dmg == null)
+                     dmg = h.transform.root.GetComponent<IDañoRecibible>();
+
+                 if (dmg != null)
+                 {
+                     Debug.Log($"Golpeando a {h.name} ({h.transform.root.name})");
+                     dmg.RecibirDaño(dano);
+                 }
+                 else
+                 {
+                     Debug.Log($"Collider detectado sin IDañoRecibible: {h.name}");
+                 }
+             }
+         }
+     }
+    */
     void AtacarCono()
     {
         Vector3 origen = Camera.main.transform.position;
@@ -380,27 +418,39 @@ public class Machete : MonoBehaviour
             QueryTriggerInteraction.Ignore
         );
 
+        Debug.Log($"[Machete] Golpe, colliders encontrados: {hits.Length}");
+
         foreach (var h in hits)
         {
+            Debug.Log($"[Machete] Collider: {h.name} (root: {h.transform.root.name})");
+
             Vector3 dir = (h.transform.position - origen).normalized;
             float ang = Vector3.Angle(forward, dir);
             if (ang <= anguloGolpe * 0.5f)
             {
-                // Intento 1: buscar en padre
-                var dmg = h.GetComponentInParent<IDañoRecibible>();
+                // 1) Intento genérico por interfaz
+                IDañoRecibible dmg = h.GetComponentInParent<IDañoRecibible>();
 
-                // Intento 2: buscar en la raíz (por si el collider está muy profundo)
+                // 2) Fallback directo a AnimalIA por si algo falla con la interfaz
                 if (dmg == null)
-                    dmg = h.transform.root.GetComponent<IDañoRecibible>();
+                {
+                    var animal = h.GetComponentInParent<AnimalIA>();
+                    if (animal != null)
+                    {
+                        Debug.Log($"[Machete] Fallback → AnimalIA en {animal.name}");
+                        animal.RecibirDaño(dano);
+                        continue;
+                    }
+                }
 
                 if (dmg != null)
                 {
-                    Debug.Log($"Golpeando a {h.name} ({h.transform.root.name})");
+                    Debug.Log($"[Machete] Aplicando daño a {h.name}");
                     dmg.RecibirDaño(dano);
                 }
                 else
                 {
-                    Debug.Log($"Collider detectado sin IDañoRecibible: {h.name}");
+                    Debug.Log($"[Machete] Collider detectado sin IDañoRecibible ni AnimalIA: {h.name}");
                 }
             }
         }

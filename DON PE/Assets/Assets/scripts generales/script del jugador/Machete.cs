@@ -131,7 +131,7 @@ public class Machete : MonoBehaviour
     }
 }
 */
-using System.Collections;
+/*using System.Collections;
 using UnityEngine;
 
 public class Machete : MonoBehaviour
@@ -247,6 +247,152 @@ public class Machete : MonoBehaviour
             if (ang <= anguloGolpe * 0.5f)
             {
                 var dmg = h.GetComponentInParent<IDañoRecibible>();
+                if (dmg != null)
+                {
+                    Debug.Log($"Golpeando a {h.name} ({h.transform.root.name})");
+                    dmg.RecibirDaño(dano);
+                }
+                else
+                {
+                    Debug.Log($"Collider detectado sin IDañoRecibible: {h.name}");
+                }
+            }
+        }
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!Application.isPlaying) return;
+
+        Vector3 origen = Camera.main.transform.position;
+        Vector3 forward = Camera.main.transform.forward;
+
+        Gizmos.color = new Color(1f, 0f, 0f, 0.2f);
+        Gizmos.DrawWireSphere(origen + forward * (rangoGolpe * 0.5f), radioColision);
+    }
+}
+*/
+using System.Collections;
+using UnityEngine;
+
+public class Machete : MonoBehaviour
+{
+    [Header("Ataque")]
+    public int dano = 25;
+    public float rangoGolpe = 2f;
+    public float anguloGolpe = 60f;
+    public float radioColision = 1f;
+    public LayerMask capasAtacables;
+    public float tiempoEntreGolpes = 0.6f;
+
+    [Header("Animación")]
+    public float duracionSwing = 0.3f;
+    public float desplazamientoX = 10f;
+    public float inclinacionX = 30f;
+
+    [Header("Audio")]
+    public AudioSource audioSrc;
+    public AudioClip sonidoGolpe;
+
+    private bool puedeAtacar = true;
+    private Vector3 pos0;
+    private Quaternion rot0;
+
+    void Start()
+    {
+        pos0 = transform.localPosition;
+        rot0 = transform.localRotation;
+    }
+
+    void Update()
+    {
+        if (Input.GetMouseButtonDown(0) && puedeAtacar)
+            StartCoroutine(Ataque());
+    }
+
+    IEnumerator Ataque()
+    {
+        puedeAtacar = false;
+
+        // Sonido del machete
+        if (audioSrc != null && sonidoGolpe != null)
+            audioSrc.PlayOneShot(sonidoGolpe);
+
+        float mitad = duracionSwing / 2f;
+
+        // Ida
+        float t = 0f;
+        while (t < mitad)
+        {
+            float p = t / mitad;
+            transform.localPosition = Vector3.Lerp(
+                pos0 + Vector3.right * desplazamientoX,
+                pos0,
+                p
+            );
+            transform.localRotation = Quaternion.Lerp(
+                rot0,
+                rot0 * Quaternion.Euler(inclinacionX, 0f, 0f),
+                p
+            );
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        // Vuelta
+        t = 0f;
+        while (t < mitad)
+        {
+            float p = t / mitad;
+            transform.localPosition = Vector3.Lerp(
+                pos0,
+                pos0 + Vector3.left * desplazamientoX,
+                p
+            );
+            transform.localRotation = Quaternion.Lerp(
+                rot0 * Quaternion.Euler(inclinacionX, 0f, 0f),
+                rot0,
+                p
+            );
+            t += Time.deltaTime;
+            yield return null;
+        }
+
+        transform.localPosition = pos0;
+        transform.localRotation = rot0;
+
+        // Aplicar daño
+        AtacarCono();
+
+        yield return new WaitForSeconds(tiempoEntreGolpes);
+        puedeAtacar = true;
+    }
+
+    void AtacarCono()
+    {
+        Vector3 origen = Camera.main.transform.position;
+        Vector3 forward = Camera.main.transform.forward;
+
+        Collider[] hits = Physics.OverlapSphere(
+            origen + forward * (rangoGolpe * 0.5f),
+            radioColision,
+            capasAtacables,
+            QueryTriggerInteraction.Ignore
+        );
+
+        foreach (var h in hits)
+        {
+            Vector3 dir = (h.transform.position - origen).normalized;
+            float ang = Vector3.Angle(forward, dir);
+            if (ang <= anguloGolpe * 0.5f)
+            {
+                // Intento 1: buscar en padre
+                var dmg = h.GetComponentInParent<IDañoRecibible>();
+
+                // Intento 2: buscar en la raíz (por si el collider está muy profundo)
+                if (dmg == null)
+                    dmg = h.transform.root.GetComponent<IDañoRecibible>();
+
                 if (dmg != null)
                 {
                     Debug.Log($"Golpeando a {h.name} ({h.transform.root.name})");
